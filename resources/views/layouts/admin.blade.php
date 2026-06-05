@@ -46,11 +46,8 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <div class="sidebar-brand-icon">
-                <i class="fa-solid fa-briefcase"></i>
-            </div>
-            <div class="sidebar-brand-text">JobFair</div>
+        <div class="sidebar-brand" style="justify-content: center; padding: 1.5rem 1rem;">
+            <img src="{{ asset('template/LOGO USH NEW.png') }}" alt="Logo USH" style="max-height: 50px; width: auto;">
         </div>
         
         <div class="sidebar-menu">
