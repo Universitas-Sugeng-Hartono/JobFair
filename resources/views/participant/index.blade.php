@@ -203,6 +203,17 @@
                             @endif
                         </div>
 
+                        {{-- Lokasi Perusahaan --}}
+                        @php
+                            $companyLocation = $company->positions->whereNotNull('location')->first();
+                        @endphp
+                        @if($companyLocation)
+                            <div class="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-emerald-700 bg-emerald-50 border border-emerald-500 mb-3 font-medium px-2.5 py-1 rounded-md w-fit">
+                                <i class="fa-solid fa-location-dot"></i>
+                                {{ $companyLocation->location }}
+                            </div>
+                        @endif
+
                         {{-- Deskripsi --}}
                         <p class="text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed flex-1">
                             {{ $company->description ?? 'Informasi perusahaan belum tersedia.' }}

@@ -13,6 +13,7 @@ class Position extends Model
         'time_to_answer',
         'job_responsibilities',
         'requirements',
+        'location',
         'form_config'
     ];
 

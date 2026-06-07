@@ -56,6 +56,10 @@
                 <label for="selection">Tahapan Seleksi</label>
                 <input type="text" name="selection" id="selection" class="form-control" value="{{ old('selection', $position->selection) }}">
             </div>
+            <div class="form-group">
+                <label for="location">Lokasi</label>
+                <input type="text" name="location" id="location" class="form-control" value="{{ old('location', $position->location) }}">
+            </div>
 
             <div class="form-group">
                 <label for="job_responsibilities">Tanggung Jawab Pekerjaan</label>

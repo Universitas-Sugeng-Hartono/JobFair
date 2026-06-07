@@ -261,7 +261,7 @@
                         <span class="text-2xl sm:text-3xl font-bold">1</span>
                     </div>
                     <h3 class="text-center text-base sm:text-lg font-semibold mb-2">Daftar &amp; Verifikasi</h3>
-                    <p class="text-center text-blue-100 text-sm sm:text-base">Buat akun menggunakan NIK dan data pribadi. Admin akan memverifikasi dalam 24 jam.</p>
+                    <p class="text-center text-blue-100 text-sm sm:text-base">Buat akun menggunakan NIK dan data pribadi. Tunggu HR menghubungi Anda.</p>
                 </div>
 
                 <div class="bg-gradient-to-br from-violet-500 to-violet-600 text-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 relative overflow-hidden">
@@ -297,7 +297,6 @@
                 </span>
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4 px-4">Temukan Perusahaan Impianmu</h2>
                 <p class="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto px-4">
-                    Bergabunglah dan lamar ke perusahaan-perusahaan terkemuka yang berpartisipasi di JobFair 2026
                 </p>
             </div>
 
@@ -338,12 +337,25 @@
                                         <i class="fa-solid fa-briefcase text-[9px]"></i> {{ Str::limit($pos->name, 22) }}
                                     </span>
                                 @endforeach
-                                @if($positionCount > 2)
-                                    <span class="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
-                                        +{{ $positionCount - 2 }} lainnya
-                                    </span>
-                                @endif
                             </div>
+
+                            <!-- Lokasi Perusahaan -->
+                            @php
+                                $companyLocation = $company->positions->whereNotNull('location')->first();
+                            @endphp
+                            @if($companyLocation)
+                                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 mb-3 font-medium">
+                                    <i class="fa-solid fa-location-dot text-emerald-500"></i>
+                                    {{ $companyLocation->location }}
+                                </div>
+                            @endif
+
+                            <!-- Deskripsi -->
+                            <p class="text-xs sm:text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed flex-1">
+                                {{ $company->description ?? 'Informasi perusahaan belum tersedia.' }}
+                            </p>
+
+
 
                             <!-- Deskripsi -->
                             <p class="text-xs sm:text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed flex-1">

@@ -151,6 +151,10 @@
                 <label for="selection">Tahapan Seleksi</label>
                 <input type="text" name="selection" id="selection" class="form-control" placeholder="Contoh: Interview & Psikotes">
             </div>
+            <div class="form-group">
+                <label for="location">Lokasi</label>
+                <input type="text" name="location" id="location" class="form-control" placeholder="Contoh: Sukoharjo">
+            </div>
 
             <div class="form-group">
                 <label for="job_responsibilities">Tanggung Jawab Pekerjaan</label>

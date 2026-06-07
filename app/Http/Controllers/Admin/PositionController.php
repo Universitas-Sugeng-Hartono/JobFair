@@ -40,6 +40,8 @@ class PositionController extends Controller
         $request->validate([
             'company_id' => 'required|exists:companies,id',
             'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+
         ]);
         
         $data = $request->all();
@@ -61,6 +63,7 @@ class PositionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
         ]);
         
         $data = $request->all();

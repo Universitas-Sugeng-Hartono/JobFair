@@ -66,6 +66,15 @@
                     </div>
                     <div class="flex-1">
                         <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">{{ $company->name }}</h2>
+                        @php
+                            $companyLocation = $companyPositions->whereNotNull('location')->first();
+                        @endphp
+                        @if($companyLocation)
+                            <div class="inline-flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 border border-emerald-500 mb-4 font-medium px-2.5 py-1 rounded-md w-fit">
+                                <i class="fa-solid fa-location-dot"></i>
+                                {{ $companyLocation->location }}
+                            </div>
+                        @endif
                         @if($company->description)
                             <p class="text-sm text-slate-600 leading-relaxed">{{ $company->description }}</p>
                         @endif
