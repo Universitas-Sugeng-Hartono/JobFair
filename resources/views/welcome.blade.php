@@ -351,19 +351,12 @@
                             @endif
 
                             <!-- Deskripsi -->
-                            <p class="text-xs sm:text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed flex-1">
-                                {{ $company->description ?? 'Informasi perusahaan belum tersedia.' }}
-                            </p>
-
-
-
-                            <!-- Deskripsi -->
-                            <p class="text-xs sm:text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed flex-1">
+                            <p class="text-xs sm:text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
                                 {{ $company->description ?? 'Informasi perusahaan belum tersedia.' }}
                             </p>
 
                             <!-- Info chips -->
-                            <div class="flex gap-2 mb-3">
+                            <div class="flex gap-2 mb-3 mt-auto">
                                 <span class="inline-flex items-center gap-1 text-[10px] sm:text-xs bg-slate-50 text-slate-600 border border-slate-200 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg">
                                     <i class="fa-solid fa-briefcase text-slate-400"></i>
                                     {{ $positionCount }} Posisi
