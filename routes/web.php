@@ -22,7 +22,7 @@ Route::get('/admin', function () {
     $totalApplications = \App\Models\Application::count();
     $pendingApplications = \App\Models\Application::where('status', 'submitted')->count();
     
-    $recentCompanies = \App\Models\Company::withCount('applications')
+    $recentCompanies = \App\Models\Company::with('positions')->withCount('applications')
         ->latest()
         ->take(4)
         ->get();

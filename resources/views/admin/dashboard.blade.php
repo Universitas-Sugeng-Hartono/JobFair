@@ -64,7 +64,7 @@
                         <td>
                             <strong>{{ $company->name }}</strong>
                         </td>
-                        <td>{{ $company->position_name ?? '-' }}</td>
+                        <td>{{ $company->positions->pluck('name')->join(', ') ?: '-' }}</td>
                         <td>{{ $company->applications_count }}</td>
                         <td>
                             <a href="{{ route('companies.edit', $company->id) }}" style="color: var(--secondary-blue); margin-right: 10px;"><i class="fa-solid fa-pen-to-square"></i></a>
