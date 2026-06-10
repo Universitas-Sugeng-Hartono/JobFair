@@ -99,7 +99,16 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<style>
+    .ck-editor__editable {
+        min-height: 150px;
+    }
+</style>
 <script>
+    ClassicEditor.create(document.querySelector('#job_responsibilities')).catch(error => console.error(error));
+    ClassicEditor.create(document.querySelector('#requirements')).catch(error => console.error(error));
+
     let formFields = @json($position->form_config ?? []);
     if (!formFields || formFields.length === 0) {
         formFields = [

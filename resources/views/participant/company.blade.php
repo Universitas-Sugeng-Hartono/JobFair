@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .rich-text ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .rich-text ol { list-style-type: decimal; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .rich-text li { margin-bottom: 0.25rem; }
+        .rich-text p { margin-bottom: 0.5rem; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 text-slate-900">
@@ -120,7 +124,7 @@
             </div>
 
             {{-- Body --}}
-            <div class="px-6 sm:px-8 py-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="px-6 sm:px-8 py-6">
                 {{-- Info Posisi --}}
                 <div class="space-y-6">
                     @if($pos->job_responsibilities)
@@ -128,7 +132,7 @@
                             <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
                                 Job Responsibilities
                             </h5>
-                            <p class="text-sm text-slate-600 whitespace-pre-line pl-5 leading-relaxed border-l-2 border-slate-200">{{ $pos->job_responsibilities }}</p>
+                            <div class="text-sm text-slate-600 pl-5 leading-relaxed border-l-2 border-slate-200 rich-text">{!! $pos->job_responsibilities !!}</div>
                         </div>
                     @endif
 
@@ -137,7 +141,7 @@
                             <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
                                 Requirements
                             </h5>
-                            <p class="text-sm text-slate-600 whitespace-pre-line pl-5 leading-relaxed border-l-2 border-slate-200">{{ $pos->requirements }}</p>
+                            <div class="text-sm text-slate-600 pl-5 leading-relaxed border-l-2 border-slate-200 rich-text">{!! $pos->requirements !!}</div>
                         </div>
                     @endif
                 </div>

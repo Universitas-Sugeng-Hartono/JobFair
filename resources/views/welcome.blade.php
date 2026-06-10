@@ -65,6 +65,12 @@
             0%, 100% { transform: translateY(0) rotate(-8deg); }
             50%       { transform: translateY(-8px) rotate(-4deg); }
         }
+
+        /* Rich text styling for CKEditor content */
+        .rich-text ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .rich-text ol { list-style-type: decimal; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .rich-text li { margin-bottom: 0.25rem; }
+        .rich-text p { margin-bottom: 0.5rem; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
@@ -584,7 +590,7 @@
                         </div>
                         Job Responsibilities
                     </h4>
-                    <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed pl-0 sm:pl-10 whitespace-pre-line">${c.job_responsibilities}</p>
+                    <div class="text-slate-600 text-sm sm:text-[15px] leading-relaxed pl-0 sm:pl-10 rich-text">${c.job_responsibilities}</div>
                 </div>` : '';
 
             // Requirements
@@ -598,7 +604,7 @@
                         </div>
                         Requirements
                     </h4>
-                    <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed pl-0 sm:pl-10 whitespace-pre-line">${c.requirements}</p>
+                    <div class="text-slate-600 text-sm sm:text-[15px] leading-relaxed pl-0 sm:pl-10 rich-text">${c.requirements}</div>
                 </div>` : '';
 
             document.getElementById('companyModal').classList.remove('hidden');
