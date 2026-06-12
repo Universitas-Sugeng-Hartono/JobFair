@@ -20,6 +20,7 @@ Route::get('/admin', function () {
     $totalCompanies = \App\Models\Company::count();
     $totalParticipants = \App\Models\Participant::count();
     $totalApplications = \App\Models\Application::count();
+    $totalAttended = \App\Models\Participant::whereNotNull('attended_at')->count();
     $pendingApplications = \App\Models\Application::where('status', 'submitted')->count();
     
     $recentCompanies = \App\Models\Company::with('positions')->withCount('applications')
@@ -32,19 +33,51 @@ Route::get('/admin', function () {
         ->take(5)
         ->get();
 
+    // Chart data: applications per company (only attended participants)
+    $companiesChart = \App\Models\Company::withCount([
+        'applications as attended_applications_count' => function ($q) {
+            $q->whereHas('participant', fn($p) => $p->whereNotNull('attended_at'));
+        },
+        'applications as accepted_applications_count' => function ($q) {
+            $q->where('status', 'accepted')
+              ->whereHas('participant', fn($p) => $p->whereNotNull('attended_at'));
+        }
+    ])->get();
+    $companyLabels = $companiesChart->pluck('name')->toArray();
+    $companyApplicationCounts = $companiesChart->pluck('attended_applications_count')->toArray();
+
+    // Absorption rate: peserta hadir yang min 1 lamarannya diterima
+    $totalAbsorbed = \App\Models\Participant::whereNotNull('attended_at')
+        ->whereHas('applications', fn($q) => $q->where('status', 'accepted'))
+        ->count();
+    $companyAcceptedCounts = $companiesChart->pluck('accepted_applications_count')->toArray();
+
     return view('admin.dashboard', compact(
         'totalCompanies',
         'totalParticipants',
         'totalApplications',
+        'totalAttended',
+        'totalAbsorbed',
         'pendingApplications',
         'recentCompanies',
-        'recentActivities'
+        'recentActivities',
+        'companyLabels',
+        'companyApplicationCounts',
+        'companyAcceptedCounts'
     ));
 });
 
 Route::resource('admin/companies', CompanyController::class);
 Route::resource('admin/positions', \App\Http\Controllers\Admin\PositionController::class);
 Route::resource('admin/participants', \App\Http\Controllers\Admin\ParticipantController::class);
+
+// Update application status (accept/reject)
+Route::patch('admin/applications/{application}/status', [\App\Http\Controllers\Admin\ApplicationStatusController::class, 'update'])->name('applications.status');
+
+// Admin Attendance
+Route::get('admin/attendance', [\App\Http\Controllers\Admin\AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('admin/attendance/data', [\App\Http\Controllers\Admin\AttendanceController::class, 'data'])->name('attendance.data');
+Route::post('admin/attendance/scan', [\App\Http\Controllers\Admin\AttendanceController::class, 'scan'])->name('attendance.scan');
 
 // Admin Export
 Route::get('admin/export', [\App\Http\Controllers\Admin\ExportController::class, 'index'])->name('export.index');
@@ -65,3 +98,15 @@ Route::get('/peserta/apply/{position_id}', [ParticipantController::class, 'apply
 Route::get('/peserta/riwayat', [ParticipantController::class, 'history'])->name('participant.history');
 // Application submit
 Route::post('/apply', [ApplicationController::class, 'store'])->name('application.store');
+
+// ─── Company Portal ──────────────────────────────────────────────
+use App\Http\Controllers\Company\CompanyPortalController;
+
+Route::get('/perusahaan/login', [CompanyPortalController::class, 'showLogin'])->name('company.login');
+Route::post('/perusahaan/login', [CompanyPortalController::class, 'login'])->name('company.login.post');
+Route::post('/perusahaan/logout', [CompanyPortalController::class, 'logout'])->name('company.logout');
+
+Route::middleware('company.auth')->group(function () {
+    Route::get('/perusahaan/dashboard', [CompanyPortalController::class, 'dashboard'])->name('company.dashboard');
+    Route::get('/perusahaan/pelamar', [CompanyPortalController::class, 'applicants'])->name('company.applicants');
+});

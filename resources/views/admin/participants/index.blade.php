@@ -15,8 +15,18 @@
 @endif
 
 <div class="card">
-    <div class="card-header">
-        <h2 class="card-title">Daftar Peserta</h2>
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <h2 class="card-title" style="margin: 0;">Daftar Peserta</h2>
+        <form method="GET" action="{{ route('participants.index') }}" id="filterForm" style="display:flex; gap:0.5rem; align-items:center;">
+            <select name="status" onchange="document.getElementById('filterForm').submit()"
+                style="padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; background: white; cursor: pointer;">
+                <option value="">— Semua Peserta —</option>
+                <option value="hadir" {{ request('status') === 'hadir' ? 'selected' : '' }}>Hadir</option>
+                <option value="tidak_hadir" {{ request('status') === 'tidak_hadir' ? 'selected' : '' }}>Belum Hadir</option>
+                <option value="diterima" {{ request('status') === 'diterima' ? 'selected' : '' }}>Ada yang Diterima</option>
+                <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>Ada yang Ditolak</option>
+            </select>
+        </form>
     </div>
     <div class="card-body table-responsive" style="padding: 0;">
         <table class="table">
@@ -25,7 +35,8 @@
                     <th>No</th>
                     <th>Nama Lengkap</th>
                     <th>NIK</th>
-                    <th>Total Lamaran</th>
+                    <th>Status Hadir</th>
+                    <th>Status Lamaran</th>
                     <th>Waktu Daftar</th>
                     <th>Aksi</th>
                 </tr>
@@ -41,9 +52,26 @@
                         {{ $participant->nik }}
                     </td>
                     <td>
-                        <span class="badge" style="background: var(--primary-blue); color: white;">
-                            {{ $participant->applications_count }} / 12
-                        </span>
+                        @if($participant->attended_at)
+                            <span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                <i class="fa-solid fa-check-circle"></i> Hadir
+                            </span>
+                        @else
+                            <span style="background: #fee2e2; color: #991b1b; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                <i class="fa-solid fa-xmark-circle"></i> Belum
+                            </span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($participant->accepted_count > 0)
+                            <span style="color: #16a34a; font-weight: 600; font-size: 0.9rem;">Diterima</span>
+                        @elseif($participant->rejected_count > 0 && $participant->submitted_count == 0)
+                            <span style="color: #dc2626; font-weight: 600; font-size: 0.9rem;">Ditolak</span>
+                        @elseif($participant->submitted_count > 0)
+                            <span style="color: #64748b; font-weight: 600; font-size: 0.9rem;">Menunggu</span>
+                        @else
+                            <span style="color: #94a3b8; font-size: 0.9rem;">-</span>
+                        @endif
                     </td>
                     <td>{{ $participant->created_at->format('d M Y H:i') }}</td>
                     <td>
@@ -59,7 +87,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center" style="padding: 2rem; color: #64748b;">Belum ada peserta yang mendaftar.</td>
+                    <td colspan="7" class="text-center" style="padding: 2rem; color: #64748b;">Belum ada peserta yang mendaftar.</td>
                 </tr>
                 @endforelse
             </tbody>

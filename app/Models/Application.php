@@ -13,6 +13,11 @@ class Application extends Model
         'participant_id',
         'position_id',
         'status',
+        'accepted_at',
+    ];
+
+    protected $casts = [
+        'accepted_at' => 'datetime',
     ];
 
     public function participant()

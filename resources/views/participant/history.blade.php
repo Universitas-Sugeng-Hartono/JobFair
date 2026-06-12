@@ -31,6 +31,10 @@
 
                 <div class="flex items-center gap-3">
                     @if($nik)
+                        <button onclick="document.getElementById('qrModal').classList.remove('hidden')" class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100 hover:bg-indigo-100 transition cursor-pointer shadow-sm">
+                            <i class="fa-solid fa-qrcode text-indigo-600 text-sm"></i>
+                            <span class="hidden sm:inline text-sm font-medium text-slate-700">QR Code</span>
+                        </button>
                         <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-violet-50 border border-blue-100">
                             <i class="fa-solid fa-id-card text-blue-600 text-sm"></i>
                             <span class="text-sm font-medium text-slate-700">NIK: <span class="text-blue-600 font-bold">{{ $nik }}</span></span>
@@ -105,5 +109,6 @@
     </main>
 
     <x-bottom-nav active="history" />
+    <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
 </body>
 </html>

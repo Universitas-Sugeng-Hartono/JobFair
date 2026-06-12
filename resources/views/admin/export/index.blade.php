@@ -30,7 +30,7 @@
                 
                 <small style="display: block; margin-top: 0.75rem; color: #64748b; line-height: 1.5;">
                     <i class="fa-solid fa-circle-info" style="color: var(--secondary-blue);"></i>
-                    File yang diunduh berbentuk <strong>.xlsx </strong>
+                    Hanya pelamar yang berstatus <strong style="color: #166534;">Hadir</strong> (telah di-scan) yang akan disertakan dalam laporan ini. File yang diunduh berbentuk <strong>.xlsx </strong>
                 </small>
             </div>
 

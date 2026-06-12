@@ -39,18 +39,27 @@ class ParticipantController extends Controller
         $nik = session('participant_nik');
         $participant = null;
         $appliedPositionIds = [];
+        $alreadyAppliedToThisCompany = false;
 
         if ($nik) {
             $participant = Participant::where('nik', $nik)->first();
             if ($participant) {
                 $appliedPositionIds = Application::where('participant_id', $participant->id)
                                                 ->pluck('position_id')->toArray();
+
+                // Cek apakah peserta sudah melamar SALAH SATU posisi di perusahaan ini
+                $alreadyAppliedToThisCompany = Application::where('participant_id', $participant->id)
+                    ->whereIn('position_id', $company->positions->pluck('id'))
+                    ->exists();
             }
         }
 
         $settings = Setting::pluck('value', 'key')->toArray();
 
-        return view('participant.company', compact('company', 'companyPositions', 'participant', 'appliedPositionIds', 'nik', 'settings'));
+        return view('participant.company', compact(
+            'company', 'companyPositions', 'participant',
+            'appliedPositionIds', 'alreadyAppliedToThisCompany', 'nik', 'settings'
+        ));
     }
 
     public function apply($position_id)

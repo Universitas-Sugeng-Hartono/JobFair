@@ -56,6 +56,7 @@
                     <th>No</th>
                     <th>Perusahaan</th>
                     <th>Posisi yang Dilamar</th>
+                    <th>Status</th>
                     <th>Waktu Melamar</th>
                     <th>Aksi</th>
                 </tr>
@@ -68,11 +69,27 @@
                         <strong>{{ $application->position->company->name }}</strong>
                     </td>
                     <td>{{ $application->position->name ?? '-' }}</td>
-                    <td>{{ $application->created_at->format('d M Y, H:i') }}</td>
                     <td>
-                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="document.getElementById('modal-{{ $application->id }}').style.display='flex'">
+                        @if($application->status === 'accepted')
+                            <span style="background:#dcfce7;color:#166534;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
+                                <i class="fa-solid fa-circle-check"></i> Diterima
+                            </span>
+                        @elseif($application->status === 'rejected')
+                            <span style="background:#fee2e2;color:#991b1b;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
+                                <i class="fa-solid fa-circle-xmark"></i> Ditolak
+                            </span>
+                        @else
+                            <span style="background:#f1f5f9;color:#475569;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
+                                <i class="fa-regular fa-clock"></i> Menunggu
+                            </span>
+                        @endif
+                    </td>
+                    <td>{{ $application->created_at->format('d M Y, H:i') }}</td>
+                    <td style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+                        <button type="button" class="btn btn-outline" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;" onclick="document.getElementById('modal-{{ $application->id }}').style.display='flex'">
                             <i class="fa-solid fa-list-check"></i> Lihat Form
                         </button>
+
                     </td>
                 </tr>
 

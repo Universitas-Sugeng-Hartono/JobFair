@@ -62,15 +62,27 @@ class CompanyController extends Controller
         $company = \App\Models\Company::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'nullable|string',
+            'name'           => 'required|string|max:255',
+            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description'    => 'nullable|string',
+            'login_code'     => 'nullable|string|max:50|unique:companies,login_code,' . $company->id,
+            'pic_name'       => 'nullable|string|max:255',
+            'portal_password'=> 'nullable|string|min:6',
         ]);
 
         $data = [
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
+            'pic_name'    => $request->pic_name,
         ];
+
+        if ($request->filled('login_code')) {
+            $data['login_code'] = strtoupper(trim($request->login_code));
+        }
+
+        if ($request->filled('portal_password')) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->portal_password);
+        }
 
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $request->file('logo')->store('companies', 'public');

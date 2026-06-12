@@ -35,6 +35,10 @@
 
                 <div class="flex items-center gap-3">
                     @if($nik)
+                        <button onclick="document.getElementById('qrModal').classList.remove('hidden')" class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100 hover:bg-indigo-100 transition cursor-pointer shadow-sm">
+                            <i class="fa-solid fa-qrcode text-indigo-600 text-sm"></i>
+                            <span class="hidden sm:inline text-sm font-medium text-slate-700">QR Code</span>
+                        </button>
                         <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-violet-50 border border-blue-100">
                             <i class="fa-solid fa-id-card text-blue-600 text-sm"></i>
                             <span class="text-sm font-medium text-slate-700">NIK: <span class="text-blue-600 font-bold">{{ $nik }}</span></span>
@@ -92,6 +96,16 @@
         @php
             $hasAppliedToCompany = count(array_intersect($companyPositions->pluck('id')->toArray(), $appliedPositionIds)) > 0;
         @endphp
+
+        @if($hasAppliedToCompany || (isset($alreadyAppliedToThisCompany) && $alreadyAppliedToThisCompany))
+            <div class="mb-6 flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-800 px-5 py-4 rounded-2xl shadow-sm">
+                <i class="fa-solid fa-circle-info text-amber-500 text-xl mt-0.5"></i>
+                <div>
+                    <h4 class="font-bold mb-1">Anda sudah melamar di perusahaan ini</h4>
+                    <p class="text-sm font-medium opacity-90">Sesuai ketentuan, setiap peserta hanya diperbolehkan melamar maksimal 1 (satu) posisi untuk setiap perusahaan.</p>
+                </div>
+            </div>
+        @endif
 
         @foreach($companyPositions as $pos)
         @php
@@ -174,5 +188,6 @@
         @endforeach
     </main>
     <x-bottom-nav active="companies" />
+    <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
 </body>
 </html>

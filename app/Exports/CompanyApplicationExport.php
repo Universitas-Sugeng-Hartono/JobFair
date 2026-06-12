@@ -40,6 +40,9 @@ class CompanyApplicationExport implements FromCollection, WithHeadings, WithMapp
     {
         $positionIds = $this->company->positions->pluck('id')->toArray();
         return Application::with(['participant', 'answers', 'position'])
+            ->whereHas('participant', function ($query) {
+                $query->whereNotNull('attended_at');
+            })
             ->whereIn('position_id', $positionIds)
             ->oldest()
             ->get();

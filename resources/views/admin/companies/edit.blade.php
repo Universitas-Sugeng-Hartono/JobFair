@@ -47,6 +47,42 @@
             <textarea name="description" id="description" rows="3" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">{{ old('description', $company->description) }}</textarea>
         </div>
 
+        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 1.5rem 0;">
+        <h2 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #0f172a;">
+            <i class="fa-solid fa-key" style="color: #14b8a6; margin-right: 0.4rem;"></i>
+            Akses Portal Perusahaan
+        </h2>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+            Set kode login dan password agar perusahaan bisa mengakses portal seleksi pelamar di
+            <a href="{{ url('/perusahaan/login') }}" target="_blank" style="color: #14b8a6;">/perusahaan/login</a>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+                <label for="login_code" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Kode Login</label>
+                <input type="text" name="login_code" id="login_code" class="form-control"
+                    value="{{ old('login_code', $company->login_code) }}"
+                    placeholder="Contoh: COMP-001"
+                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1; font-family: monospace; font-size: 1rem; text-transform: uppercase;">
+                <small style="color: #64748b; margin-top: 4px; display: block;">Kode unik untuk login. Biarkan kosong jika tidak diubah.</small>
+            </div>
+            <div class="form-group">
+                <label for="pic_name" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Nama PIC Perusahaan</label>
+                <input type="text" name="pic_name" id="pic_name" class="form-control"
+                    value="{{ old('pic_name', $company->pic_name) }}"
+                    placeholder="Nama penanggung jawab"
+                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">
+            </div>
+        </div>
+
+        <div class="form-group mb-4">
+            <label for="portal_password" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Password Portal (baru)</label>
+            <input type="password" name="portal_password" id="portal_password" class="form-control"
+                placeholder="Kosongkan jika tidak ingin mengganti password"
+                style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">
+            <small style="color: #64748b; margin-top: 4px; display: block;">Isi hanya jika ingin mengatur atau mengubah password portal.</small>
+        </div>
+
         <div style="margin-top: 2rem;">
             <button type="submit" class="btn btn-primary" style="background: #3b82f6; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; border: none; cursor: pointer;">
                 <i class="fa-solid fa-save"></i> Simpan Perubahan

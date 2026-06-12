@@ -13,7 +13,13 @@ class Company extends Model
         'name',
         'logo_path',
         'description',
+        'login_code',
+        'password',
+        'email',
+        'pic_name',
     ];
+
+    protected $hidden = ['password'];
 
     public function positions()
     {

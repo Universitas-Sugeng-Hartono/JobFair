@@ -64,6 +64,9 @@
             <a href="{{ route('participants.index') }}" class="sidebar-link {{ request()->is('admin/participants*') ? 'active' : '' }}">
                 <i class="fa-solid fa-users"></i> Peserta
             </a>
+            <a href="{{ route('attendance.index') }}" class="sidebar-link {{ request()->is('admin/attendance*') ? 'active' : '' }}">
+                <i class="fa-solid fa-qrcode"></i> Manajemen Presensi
+            </a>
             
             <div class="sidebar-menu-title" style="margin-top: 1.5rem;">Laporan</div>
             

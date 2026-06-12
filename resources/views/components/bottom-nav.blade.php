@@ -23,5 +23,13 @@
         <span class="text-[11px] font-bold">Riwayat</span>
     </a>
     
-    
+    @if(session('participant_nik'))
+    <!-- QR Code -->
+    <button onclick="document.getElementById('qrModal').classList.remove('hidden')" class="flex flex-col items-center justify-center w-full h-full gap-1 transition-all text-slate-400 hover:text-indigo-500 cursor-pointer">
+        <div class="relative flex items-center justify-center">
+            <i class="fa-solid fa-qrcode text-2xl"></i>
+        </div>
+        <span class="text-[11px] font-bold">QR Code</span>
+    </button>
+    @endif
 </nav>
