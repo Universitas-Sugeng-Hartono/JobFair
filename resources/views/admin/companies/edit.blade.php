@@ -53,7 +53,7 @@
             Akses Portal Perusahaan
         </h2>
         <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
-            Set kode login dan password agar perusahaan bisa mengakses portal seleksi pelamar di
+            Set kode login agar perusahaan bisa mengakses portal seleksi pelamar di
             <a href="{{ url('/perusahaan/login') }}" target="_blank" style="color: #14b8a6;">/perusahaan/login</a>.
         </p>
 
@@ -73,14 +73,6 @@
                     placeholder="Nama penanggung jawab"
                     style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">
             </div>
-        </div>
-
-        <div class="form-group mb-4">
-            <label for="portal_password" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Password Portal (baru)</label>
-            <input type="password" name="portal_password" id="portal_password" class="form-control"
-                placeholder="Kosongkan jika tidak ingin mengganti password"
-                style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">
-            <small style="color: #64748b; margin-top: 4px; display: block;">Isi hanya jika ingin mengatur atau mengubah password portal.</small>
         </div>
 
         <div style="margin-top: 2rem;">

@@ -91,7 +91,16 @@ class CompanyPortalController extends Controller
 
         $query = Application::with(['participant', 'position', 'answers'])
             ->whereIn('position_id', $positionIds)
-            ->whereHas('participant', fn($q) => $q->whereNotNull('attended_at'));
+            ->whereHas('participant', function($q) use ($request) {
+                $q->whereNotNull('attended_at');
+                if ($request->filled('search')) {
+                    $searchTerm = '%' . $request->search . '%';
+                    $q->where(function($subQ) use ($searchTerm) {
+                        $subQ->where('nik', 'like', $searchTerm)
+                             ->orWhere('name', 'like', $searchTerm);
+                    });
+                }
+            });
 
         if ($request->filled('position_id')) {
             $query->where('position_id', $request->position_id);

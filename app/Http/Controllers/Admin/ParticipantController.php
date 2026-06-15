@@ -8,9 +8,10 @@ use App\Models\Participant;
 
 class ParticipantController extends Controller
 {
-   
     public function index(Request $request)
     {
+        $companies = \App\Models\Company::with('positions')->orderBy('name')->get();
+
         $query = Participant::withCount([
             'applications',
             'applications as accepted_count' => function ($query) {
@@ -23,6 +24,36 @@ class ParticipantController extends Controller
                 $query->where('status', 'submitted');
             }
         ])->latest();
+
+        if ($request->filled('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('nik', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm);
+            });
+        }
+
+        if ($request->filled('company_id')) {
+            if ($request->filled('position_id')) {
+                // Filter by specific position
+                $positionId = $request->position_id;
+                $query->whereHas('applications', function($q) use ($positionId) {
+                    $q->where('position_id', $positionId);
+                });
+            } else {
+                // Filter by any position in the company
+                $companyId = $request->company_id;
+                $query->whereHas('applications.position', function($q) use ($companyId) {
+                    $q->where('company_id', $companyId);
+                });
+            }
+        } elseif ($request->filled('position_id')) {
+            // Just position filter without company (fallback)
+            $positionId = $request->position_id;
+            $query->whereHas('applications', function($q) use ($positionId) {
+                $q->where('position_id', $positionId);
+            });
+        }
 
         if ($request->has('status') && $request->status !== '') {
             if ($request->status === 'hadir') {
@@ -41,7 +72,7 @@ class ParticipantController extends Controller
         }
 
         $participants = $query->paginate(10)->appends($request->query());
-        return view('admin.participants.index', compact('participants'));
+        return view('admin.participants.index', compact('participants', 'companies'));
     }
 
   

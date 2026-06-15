@@ -84,11 +84,13 @@
 </div>
 
 <div class="card">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 class="card-title">Daftar Kehadiran Real-time</h3>
-        <span class="pulsing" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #10b981; font-weight: 600;">
-            <i class="fa-solid fa-circle"></i> Live Updates
-        </span>
+    <div class="card-header" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="card-title" style="margin: 0;">Daftar Kehadiran </h3>
+            <span class="pulsing" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #10b981; font-weight: 600;">
+                <i class="fa-solid fa-circle"></i> Live Updates
+            </span>
+        </div>
     </div>
     <div class="table-container">
         <table class="table">
@@ -112,6 +114,7 @@
 
 @push('scripts')
 <script>
+
     // Keep input focused if clicked anywhere inside the scanner container
     document.querySelector('.scanner-container').addEventListener('click', function() {
         document.getElementById('nikInput').focus();
@@ -213,7 +216,7 @@
             const data = await response.json();
             
             if(data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748b; padding: 2rem;">Belum ada peserta yang hadir hari ini.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748b; padding: 2rem;">Belum ada peserta yang hadir (atau tidak ada yang cocok dengan pencarian).</td></tr>';
                 return;
             }
 

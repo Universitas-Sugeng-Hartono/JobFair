@@ -114,7 +114,7 @@
 
 {{-- ── Row 1: 4 stat cards ─────────────────────────── --}}
 <div class="dash-stats">
-    <div class="dstat" style="background: linear-gradient(135deg,#2563eb,#1d4ed8);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-building"></i></div>
         <div>
             <div class="dstat-label">Total Perusahaan</div>
@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    <div class="dstat" style="background: linear-gradient(135deg,#7c3aed,#6d28d9);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-users"></i></div>
         <div>
             <div class="dstat-label">Total Peserta</div>
@@ -131,7 +131,7 @@
         </div>
     </div>
 
-    <div class="dstat" style="background: linear-gradient(135deg,#0891b2,#0e7490);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-file-signature"></i></div>
         <div>
             <div class="dstat-label">Total Lamaran</div>
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <div class="dstat" style="background: linear-gradient(135deg,#059669,#047857);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-user-check"></i></div>
         <div>
             <div class="dstat-label">Peserta Hadir</div>
@@ -151,7 +151,7 @@
 
 {{-- ── Row 2: 3 stat cards ─────────────────────────── --}}
 <div class="dash-stats-row2">
-    <div class="dstat" style="background: linear-gradient(135deg,#d97706,#b45309);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-percent"></i></div>
         <div>
             <div class="dstat-label">Tingkat Kehadiran</div>
@@ -159,7 +159,7 @@
         </div>
     </div>
 
-    <div class="dstat" style="background: linear-gradient(135deg,#4f46e5,#4338ca);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-briefcase"></i></div>
         <div>
             <div class="dstat-label">Peserta Terserap</div>
@@ -167,7 +167,7 @@
         </div>
     </div>
 
-    <div class="dstat" style="background: linear-gradient(135deg,#db2777,#be185d);">
+    <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-chart-pie"></i></div>
         <div>
             <div class="dstat-label">Tingkat Keteserapan</div>
@@ -224,8 +224,8 @@
                 <p style="font-size:0.75rem;color:#64748b;margin:0;">Perbandingan pelamar vs diterima</p>
             </div>
         </div>
-        <div class="card-body">
-            <canvas id="absorptionBarChart" style="max-height:240px;"></canvas>
+        <div class="card-body" style="height: 400px;">
+            <canvas id="absorptionBarChart"></canvas>
         </div>
     </div>
 
@@ -394,6 +394,7 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { display: true, position: 'top', labels: { font: { size: 12 }, boxWidth: 12, usePointStyle: true } },
                 tooltip: {
@@ -409,7 +410,7 @@
                 }
             },
             scales: {
-                x: { grid: { display: false }, ticks: { maxRotation: 30, font: { size: 11 } } },
+                x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 45, font: { size: 10 } } },
                 y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f8fafc' } }
             }
         }

@@ -25,7 +25,7 @@
             <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                 <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Perusahaan</th>
                 <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Lowongan</th>
-                <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Lokasi</th>
+                <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Info Portal</th>
                 <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Total Pelamar</th>
                 <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem; text-align: right;">Aksi</th>
             </tr>
@@ -55,7 +55,16 @@
                     </a>
                 </td>
                 <td style="padding: 1rem 1.5rem; color: #64748b; font-size: 0.875rem;">
-                    {{ $company->location ?? '-' }}
+                    @if($company->login_code)
+                        <div style="font-family: monospace; color: #14b8a6; font-weight: 600; font-size: 0.95rem;">
+                            <i class="fa-solid fa-key" style="font-size: 0.75rem;"></i> {{ $company->login_code }}
+                        </div>
+                        @if($company->pic_name)
+                            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;"><i class="fa-solid fa-user"></i> {{ $company->pic_name }}</div>
+                        @endif
+                    @else
+                        <span style="color: #cbd5e1; font-style: italic;">Belum diset</span>
+                    @endif
                 </td>
                 <td style="padding: 1rem 1.5rem;">
                     <span style="background: #f0fdf4; color: #166534; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; border: 1px solid #bbf7d0;">

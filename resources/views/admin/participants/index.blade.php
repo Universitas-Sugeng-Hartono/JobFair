@@ -15,17 +15,52 @@
 @endif
 
 <div class="card">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div class="card-header" style="display: flex; flex-direction: column; gap: 1rem;">
         <h2 class="card-title" style="margin: 0;">Daftar Peserta</h2>
-        <form method="GET" action="{{ route('participants.index') }}" id="filterForm" style="display:flex; gap:0.5rem; align-items:center;">
-            <select name="status" onchange="document.getElementById('filterForm').submit()"
-                style="padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; background: white; cursor: pointer;">
-                <option value="">— Semua Peserta —</option>
-                <option value="hadir" {{ request('status') === 'hadir' ? 'selected' : '' }}>Hadir</option>
-                <option value="tidak_hadir" {{ request('status') === 'tidak_hadir' ? 'selected' : '' }}>Belum Hadir</option>
-                <option value="diterima" {{ request('status') === 'diterima' ? 'selected' : '' }}>Ada yang Diterima</option>
-                <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>Ada yang Ditolak</option>
-            </select>
+        <form method="GET" action="{{ route('participants.index') }}" id="filterForm" style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; width: 100%;">
+            
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari NIK atau Nama..." 
+                    style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; outline: none;">
+            </div>
+
+            <div style="min-width: 200px;">
+                <select name="company_id" id="companyFilter" onchange="updatePositions(); document.getElementById('filterForm').submit()"
+                    style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; background: white; cursor: pointer;">
+                    <option value="">— Semua Perusahaan —</option>
+                    @foreach($companies as $company)
+                        <option value="{{ $company->id }}" {{ request('company_id') == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div style="min-width: 200px;">
+                <select name="position_id" id="positionFilter" onchange="document.getElementById('filterForm').submit()"
+                    style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; background: white; cursor: pointer;">
+                    <option value="">— Semua Posisi —</option>
+                </select>
+            </div>
+
+            <div style="min-width: 160px;">
+                <select name="status" onchange="document.getElementById('filterForm').submit()"
+                    style="width: 100%; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.875rem; color: #0f172a; background: white; cursor: pointer;">
+                    <option value="">— Status Peserta —</option>
+                    <option value="hadir" {{ request('status') === 'hadir' ? 'selected' : '' }}>Hadir</option>
+                    <option value="tidak_hadir" {{ request('status') === 'tidak_hadir' ? 'selected' : '' }}>Belum Hadir</option>
+                    <option value="diterima" {{ request('status') === 'diterima' ? 'selected' : '' }}>Ada yang Diterima</option>
+                    <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>Ada yang Ditolak</option>
+                </select>
+            </div>
+
+            <button type="submit" style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.875rem;">
+                <i class="fa-solid fa-search"></i> Cari
+            </button>
+
+            @if(request()->anyFilled(['search', 'company_id', 'position_id', 'status']))
+            <a href="{{ route('participants.index') }}" style="padding: 0.5rem 1rem; background: #f1f5f9; color: #475569; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.875rem;">
+                Reset
+            </a>
+            @endif
         </form>
     </div>
     <div class="card-body table-responsive" style="padding: 0;">
@@ -100,3 +135,39 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    const companiesData = @json($companies);
+    const positionFilter = document.getElementById('positionFilter');
+    const companyFilter = document.getElementById('companyFilter');
+    const selectedPositionId = "{{ request('position_id') }}";
+
+    function updatePositions() {
+        const companyId = companyFilter.value;
+        
+        // Clear current options
+        positionFilter.innerHTML = '<option value="">— Semua Posisi —</option>';
+        
+        if (!companyId) {
+            return;
+        }
+
+        const company = companiesData.find(c => c.id == companyId);
+        if (company && company.positions) {
+            company.positions.forEach(pos => {
+                const option = document.createElement('option');
+                option.value = pos.id;
+                option.textContent = pos.name;
+                if (pos.id == selectedPositionId) {
+                    option.selected = true;
+                }
+                positionFilter.appendChild(option);
+            });
+        }
+    }
+
+    // Initialize on page load
+    updatePositions();
+</script>
+@endpush

@@ -27,6 +27,8 @@ class CompanyController extends Controller
             'name' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
+            'login_code' => 'nullable|string|max:50|unique:companies,login_code',
+            'pic_name' => 'nullable|string|max:255',
         ]);
 
         $logoPath = null;
@@ -34,11 +36,19 @@ class CompanyController extends Controller
             $logoPath = $request->file('logo')->store('companies', 'public');
         }
 
-        \App\Models\Company::create([
+        $data = [
             'name' => $request->name,
             'logo_path' => $logoPath,
             'description' => $request->description,
-        ]);
+            'pic_name' => $request->pic_name,
+        ];
+
+        if ($request->filled('login_code')) {
+            $data['login_code'] = strtoupper(trim($request->login_code));
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['login_code']);
+        }
+
+        \App\Models\Company::create($data);
 
         return redirect()->route('companies.index')->with('success', 'Perusahaan berhasil ditambahkan');
     }
@@ -67,7 +77,6 @@ class CompanyController extends Controller
             'description'    => 'nullable|string',
             'login_code'     => 'nullable|string|max:50|unique:companies,login_code,' . $company->id,
             'pic_name'       => 'nullable|string|max:255',
-            'portal_password'=> 'nullable|string|min:6',
         ]);
 
         $data = [
@@ -78,10 +87,8 @@ class CompanyController extends Controller
 
         if ($request->filled('login_code')) {
             $data['login_code'] = strtoupper(trim($request->login_code));
-        }
-
-        if ($request->filled('portal_password')) {
-            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->portal_password);
+            // Password otomatis disamakan dengan login_code
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['login_code']);
         }
 
         if ($request->hasFile('logo')) {

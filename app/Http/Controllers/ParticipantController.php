@@ -141,6 +141,16 @@ class ParticipantController extends Controller
                 ]);
         }
 
+        // Cek kuota maksimal 250 peserta sebelum membuat peserta baru
+        $totalParticipants = Participant::count();
+        if ($totalParticipants >= 250) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'nik' => 'Mohon maaf, kuota peserta JobFair sudah penuh (Maksimal 250 peserta). Pendaftaran telah ditutup.',
+                ]);
+        }
+
         // Buat peserta baru
         $participant = Participant::create([
             'nik'  => $nik,

@@ -74,7 +74,8 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+                <input type="password" id="password" name="password" placeholder="Sama dengan Kode Login" required>
+
                 @error('password')
                     <small style="color:#e11d48;margin-top:0.25rem;display:block;">{{ $message }}</small>
                 @enderror

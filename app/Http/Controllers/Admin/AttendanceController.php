@@ -13,17 +13,48 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        return view('admin.attendance.index');
+        $companies = \App\Models\Company::with('positions')->orderBy('name')->get();
+        return view('admin.attendance.index', compact('companies'));
     }
 
     /**
      * Return JSON data of all attendees for realtime table updates.
      */
-    public function data()
+    public function data(Request $request)
     {
-        $attendees = Participant::whereNotNull('attended_at')
-                        ->orderBy('attended_at', 'desc')
-                        ->get();
+        $query = Participant::whereNotNull('attended_at');
+
+        if ($request->filled('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('nik', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm);
+            });
+        }
+
+        if ($request->filled('company_id')) {
+            if ($request->filled('position_id')) {
+                // Filter by specific position
+                $positionId = $request->position_id;
+                $query->whereHas('applications', function($q) use ($positionId) {
+                    $q->where('position_id', $positionId);
+                });
+            } else {
+                // Filter by any position in the company
+                $companyId = $request->company_id;
+                $query->whereHas('applications.position', function($q) use ($companyId) {
+                    $q->where('company_id', $companyId);
+                });
+            }
+        } elseif ($request->filled('position_id')) {
+            // Just position filter without company (fallback)
+            $positionId = $request->position_id;
+            $query->whereHas('applications', function($q) use ($positionId) {
+                $q->where('position_id', $positionId);
+            });
+        }
+
+        $attendees = $query->orderBy('attended_at', 'desc')->get();
         return response()->json($attendees);
     }
 
