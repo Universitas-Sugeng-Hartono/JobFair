@@ -36,6 +36,7 @@ class CompanyPortalController extends Controller
         session([
             'company_id'   => $company->id,
             'company_name' => $company->name,
+            'company_logo' => $company->logo_path,
         ]);
 
         return redirect()->route('company.dashboard');
@@ -43,7 +44,7 @@ class CompanyPortalController extends Controller
 
     public function logout()
     {
-        session()->forget(['company_id', 'company_name']);
+        session()->forget(['company_id', 'company_name', 'company_logo']);
         return redirect()->route('company.login');
     }
 
