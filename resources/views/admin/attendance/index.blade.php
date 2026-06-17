@@ -140,8 +140,8 @@
         e.preventDefault();
         const nik = input.value.trim();
         
-        if(nik.length < 5) {
-            showAlert('Format NIK tidak valid.', 'error');
+        if(nik.length !== 16) {
+            showAlert('Format NIK tidak valid. Harus 16 digit.', 'error');
             input.value = '';
             input.focus();
             return;

@@ -110,9 +110,16 @@
                             @error('name') <p class="text-red-200 text-sm mt-1">{{ $message }}</p> @enderror
                             
                             <input type="text" name="nik" maxlength="16" placeholder="Masukkan 16 digit NIK Anda"
-                                   class="w-full px-4 py-3 rounded-xl text-slate-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   class="w-full px-4 py-3 rounded-xl text-slate-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-white/50 mb-3"
                                    oninput="this.value=this.value.replace(/\D/g,'')" required>
-                            @error('nik') <p class="text-red-200 text-sm mt-1">{{ $message }}</p> @enderror
+                            @error('nik') <p class="text-red-200 text-sm mt-1 mb-3">{{ $message }}</p> @enderror
+                            
+                            <select name="participant_type" class="w-full px-4 py-3 rounded-xl text-slate-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-white/50" required>
+                                <option value="" disabled selected>Pilih Kategori Peserta</option>
+                                <option value="Mahasiswa/Alumni USH">Mahasiswa/Alumni USH</option>
+                                <option value="Umum">Umum</option>
+                            </select>
+                            @error('participant_type') <p class="text-red-200 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                         <button type="submit" class="px-6 py-3 bg-white text-blue-700 font-semibold rounded-xl hover:bg-blue-50 transition flex items-center gap-2 justify-center mt-2">
                             <i class="fa-solid fa-arrow-right"></i> Mulai

@@ -97,15 +97,19 @@ class ParticipantController extends Controller
         $request->validate([
             'nik'  => 'required|digits:16',
             'name' => 'required|string|min:3|max:255',
+            'participant_type' => 'required|in:Mahasiswa/Alumni USH,Umum',
         ], [
             'nik.required'  => 'NIK wajib diisi.',
             'nik.digits'    => 'NIK harus tepat 16 digit angka.',
             'name.required' => 'Nama lengkap wajib diisi.',
             'name.min'      => 'Nama minimal 3 karakter.',
+            'participant_type.required' => 'Kategori peserta wajib dipilih.',
+            'participant_type.in' => 'Kategori peserta tidak valid.',
         ]);
 
         $nik  = $request->nik;
         $name = trim($request->name);
+        $participantType = $request->participant_type;
 
         // Cek apakah NIK sudah terdaftar
         $existingByNik = Participant::where('nik', $nik)->first();
@@ -155,6 +159,7 @@ class ParticipantController extends Controller
         $participant = Participant::create([
             'nik'  => $nik,
             'name' => $name,
+            'participant_type' => $participantType,
         ]);
 
         session([
