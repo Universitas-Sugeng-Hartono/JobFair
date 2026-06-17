@@ -80,8 +80,12 @@
                             <div class="user-name">{{ session('company_name', '-') }}</div>
                             <div class="user-role">Perusahaan Mitra</div>
                         </div>
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #14b8a6, #0f766e); font-size: 1.1rem; color: white; display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-building"></i>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #14b8a6, #0f766e); font-size: 1.1rem; color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0;">
+                            @if(session('company_logo'))
+                                <img src="{{ asset('storage/' . session('company_logo')) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            @else
+                                <i class="fa-solid fa-building"></i>
+                            @endif
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; color: #64748b;"></i>
                     </div>

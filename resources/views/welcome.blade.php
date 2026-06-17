@@ -125,7 +125,7 @@
 
     <!-- ===== HERO SECTION ===== -->
     <section class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-violet-600/5 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-blue-400/5 to-transparent pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-20">
             <div class="flex flex-col lg:grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
 
@@ -160,7 +160,7 @@
 
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        <a href="{{route('participant.index')}}" class="inline-flex items-center justify-center h-11 sm:h-12 lg:h-14 px-5 sm:px-6 lg:px-8 text-sm sm:text-base lg:text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 rounded-xl shadow-xl shadow-blue-500/20 transition-all transform hover:-translate-y-0.5">
+                        <a href="{{route('participant.index')}}" class="inline-flex items-center justify-center h-11 sm:h-12 lg:h-14 px-5 sm:px-6 lg:px-8 text-sm sm:text-base lg:text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 rounded-xl shadow-xl shadow-blue-500/20 transition-all transform hover:-translate-y-0.5">
                             Mulai Sekarang
                             <i class="fa-solid fa-arrow-right ml-2 text-sm sm:text-base"></i>
                         </a>
@@ -170,12 +170,12 @@
                     <!-- Stats -->
                     <div class="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 pt-2 flex-wrap">
                         <div>
-                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">{{ $settings['stat_1_value'] ?? '13+' }}</div>
+                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{{ $settings['stat_1_value'] ?? '13+' }}</div>
                             <div class="text-xs sm:text-sm text-slate-500 font-medium">{{ $settings['stat_1_label'] ?? 'Perusahaan' }}</div>
                         </div>
                         <div class="w-px h-8 sm:h-10 bg-slate-200 hidden sm:block"></div>
                         <div>
-                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">{{ $settings['stat_2_value'] ?? '250' }}</div>
+                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{{ $settings['stat_2_value'] ?? '250' }}</div>
                             <div class="text-xs sm:text-sm text-slate-500 font-medium">{{ $settings['stat_2_label'] ?? 'Kuota Peserta' }}</div>
                         </div>
                         <div class="w-px h-8 sm:h-10 bg-slate-200 hidden sm:block"></div>
@@ -189,7 +189,7 @@
                 <!-- Right: Illustration -->
                 <div class="relative w-full flex items-center justify-center">
                     <!-- Glow background -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/15 to-violet-500/15 rounded-3xl blur-3xl"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/15 to-blue-400/15 rounded-3xl blur-3xl"></div>
 
                     <!-- Floating stats card top-left -->
                     <div class="absolute top-4 left-0 sm:left-4 z-10 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100 px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
@@ -510,7 +510,7 @@
                     @endif
                     <div>
                         <div class="font-bold text-sm sm:text-base">{{ $settings['logo_text'] ?? 'JobFair 2026' }}</div>
-                        <div class="text-xs sm:text-sm text-slate-400">Powered by Technology</div>
+                
                     </div>
                 </div>
                 <div class="text-xs sm:text-sm text-slate-400">&copy; {{ date('Y') }} {{ $settings['logo_text'] ?? 'JobFair 2026' }}. All rights reserved.</div>
