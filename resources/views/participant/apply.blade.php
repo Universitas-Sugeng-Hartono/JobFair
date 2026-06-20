@@ -78,23 +78,24 @@
                             </div>
                         @else
                             <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Lengkapi Persyaratan Berikut</h3>
-                            @foreach($fields as $field)
+                            @foreach($fields as $index => $field)
+                                @php $fieldId = $field['id'] ?? $index; @endphp
                                 <div class="space-y-1.5">
                                     <label class="block text-sm font-semibold text-slate-700">
                                         {{ $field['label'] }} {!! !empty($field['required']) ? '<span class="text-red-500">*</span>' : '' !!}
                                     </label>
                                     @if($field['type'] === 'file')
                                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:bg-slate-50 hover:border-blue-300 transition relative overflow-hidden group">
-                                            <input type="file" name="field_{{ $field['id'] }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" {{ !empty($field['required']) ? 'required' : '' }} onchange="updateFileName(this)">
+                                            <input type="file" name="field_{{ $fieldId }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" {{ !empty($field['required']) ? 'required' : '' }} onchange="updateFileName(this)">
                                             <div class="file-display flex flex-col items-center justify-center pointer-events-none relative z-0">
                                                 <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-2 group-hover:text-blue-400 transition-colors file-icon"></i>
                                                 <p class="text-sm text-slate-600 file-name line-clamp-1 px-4">Klik atau seret file ke sini</p>
                                             </div>
                                         </div>
                                     @elseif($field['type'] === 'textarea')
-                                        <textarea name="field_{{ $field['id'] }}" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm" placeholder="Isi {{ $field['label'] }}..." {{ !empty($field['required']) ? 'required' : '' }}></textarea>
+                                        <textarea name="field_{{ $fieldId }}" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm" placeholder="Isi {{ $field['label'] }}..." {{ !empty($field['required']) ? 'required' : '' }}></textarea>
                                     @else
-                                        <input type="{{ $field['type'] === 'number' ? 'tel' : 'text' }}" name="field_{{ $field['id'] }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm" placeholder="Isi {{ $field['label'] }}..." {{ !empty($field['required']) ? 'required' : '' }}>
+                                        <input type="{{ $field['type'] === 'number' ? 'tel' : 'text' }}" name="field_{{ $fieldId }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm" placeholder="Isi {{ $field['label'] }}..." {{ !empty($field['required']) ? 'required' : '' }}>
                                     @endif
                                 </div>
                             @endforeach

@@ -13,6 +13,11 @@ class Participant extends Model
         'nik',
         'name',
         'status',
+        'participant_type',
+    ];
+
+    protected $casts = [
+        'attended_at' => 'datetime',
     ];
 
     public function applications()

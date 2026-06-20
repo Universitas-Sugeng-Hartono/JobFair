@@ -149,8 +149,17 @@
     </div>
 </div>
 
-{{-- ── Row 2: 3 stat cards ─────────────────────────── --}}
-<div class="dash-stats-row2">
+{{-- ── Row 2: 4 stat cards ─────────────────────────── --}}
+<div class="dash-stats">
+    <div class="dstat" style="background: var(--primary-blue);">
+        <div class="dstat-badge"><i class="fa-solid fa-user-graduate"></i></div>
+        <div>
+            <div class="dstat-label">Total Lulusan USH</div>
+            <div class="dstat-value">{{ $totalParticipantsInternal }}</div>
+            <div class="dstat-sub">Hadir: <strong>{{ $totalAttendedInternal }}</strong> orang</div>
+        </div>
+    </div>
+
     <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-percent"></i></div>
         <div>
@@ -164,13 +173,14 @@
         <div>
             <div class="dstat-label">Peserta Terserap</div>
             <div class="dstat-value">{{ $totalAbsorbed }}</div>
+            <div class="dstat-sub">Internal: <strong>{{ $totalAbsorbedInternal }}</strong> | Umum: <strong>{{ $totalAbsorbedExternal }}</strong></div>
         </div>
     </div>
 
     <div class="dstat" style="background: var(--primary-blue);">
         <div class="dstat-badge"><i class="fa-solid fa-chart-pie"></i></div>
         <div>
-            <div class="dstat-label">Tingkat Keteserapan</div>
+            <div class="dstat-label">Tingkat Keteserapan Keseluruhan</div>
             <div class="dstat-value">{{ $totalAttended > 0 ? round(($totalAbsorbed / $totalAttended) * 100) : 0 }}%</div>
         </div>
     </div>
@@ -188,19 +198,35 @@
             </div>
         </div>
         <div class="card-body" style="display:flex;flex-direction:column;align-items:center;padding-top:0.5rem;">
-            {{-- Big percentage --}}
-            <div style="font-size:2.2rem;font-weight:800;color:#4f46e5;line-height:1;margin-bottom:0.1rem;">
-                {{ $totalAttended > 0 ? round(($totalAbsorbed / $totalAttended) * 100) : 0 }}%
+            
+            <div style="display: flex; gap: 1rem; width: 100%; justify-content: space-around; margin-bottom: 1rem;">
+                <div style="display:flex;flex-direction:column;align-items:center;">
+                    <div style="font-size:1.6rem;font-weight:800;color:#4f46e5;line-height:1;margin-bottom:0.1rem;">
+                        {{ $totalAttendedInternal > 0 ? round(($totalAbsorbedInternal / $totalAttendedInternal) * 100) : 0 }}%
+                    </div>
+                    <div style="font-size:0.65rem;color:#64748b;margin-bottom:0.5rem;text-align:center;">Lulusan USH</div>
+                    <canvas id="internalDonutChart" style="max-height:140px;max-width:140px;"></canvas>
+                </div>
+                
+                <div style="display:flex;flex-direction:column;align-items:center;">
+                    <div style="font-size:1.6rem;font-weight:800;color:#0ea5e9;line-height:1;margin-bottom:0.1rem;">
+                        {{ $totalAttendedExternal > 0 ? round(($totalAbsorbedExternal / $totalAttendedExternal) * 100) : 0 }}%
+                    </div>
+                    <div style="font-size:0.65rem;color:#64748b;margin-bottom:0.5rem;text-align:center;">Umum</div>
+                    <canvas id="externalDonutChart" style="max-height:140px;max-width:140px;"></canvas>
+                </div>
             </div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:1rem;">Keteserapan Total</div>
 
-            <canvas id="absorptionDonutChart" style="max-height:200px;max-width:200px;"></canvas>
-
-            <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1.25rem;width:100%;">
-                <div class="legend-row">
+            <div style="display:flex;flex-direction:column;gap:0.4rem;width:100%;font-size:0.75rem;">
+                <div class="legend-row" style="margin-bottom: 0.2rem;">
                     <span class="legend-dot" style="background:#4f46e5;"></span>
-                    Terserap / Diterima
-                    <span class="legend-count">{{ $totalAbsorbed }}</span>
+                    <span style="font-weight: 600;">Lulusan USH Terserap</span>
+                    <span class="legend-count">{{ $totalAbsorbedInternal }}</span>
+                </div>
+                <div class="legend-row" style="margin-bottom: 0.2rem;">
+                    <span class="legend-dot" style="background:#0ea5e9;"></span>
+                    <span style="font-weight: 600;">Umum Terserap</span>
+                    <span class="legend-count">{{ $totalAbsorbedExternal }}</span>
                 </div>
                 <div class="legend-row">
                     <span class="legend-dot" style="background:#10b981;"></span>
@@ -209,7 +235,7 @@
                 </div>
                 <div class="legend-row">
                     <span class="legend-dot" style="background:#e2e8f0;"></span>
-                    Tidak Hadir
+                    Tidak Hadir (Total)
                     <span class="legend-count">{{ $totalParticipants - $totalAttended }}</span>
                 </div>
             </div>
@@ -337,28 +363,59 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // Donut
-    new Chart(document.getElementById('absorptionDonutChart'), {
+    // Donut Internal
+    new Chart(document.getElementById('internalDonutChart'), {
         type: 'doughnut',
         data: {
-            labels: ['Terserap/Diterima', 'Hadir Belum Diterima', 'Tidak Hadir'],
+            labels: ['Terserap', 'Hadir ', 'Tidak Hadir'],
             datasets: [{
-                data: [{{ $totalAbsorbed }}, {{ $totalAttended - $totalAbsorbed }}, {{ $totalParticipants - $totalAttended }}],
+                data: [{{ $totalAbsorbedInternal }}, {{ $totalAttendedInternal - $totalAbsorbedInternal }}, {{ $totalParticipantsInternal - $totalAttendedInternal }}],
                 backgroundColor: ['#4f46e5', '#10b981', '#e2e8f0'],
                 borderColor: ['#4338ca', '#059669', '#cbd5e1'],
-                borderWidth: 2,
-                hoverOffset: 6
+                borderWidth: 1,
+                hoverOffset: 4
             }]
         },
         options: {
             responsive: true,
-            cutout: '68%',
+            cutout: '65%',
             plugins: {
                 legend: { display: false },
                 tooltip: {
                     callbacks: {
                         label: ctx => {
-                            const total = {{ $totalParticipants }};
+                            const total = {{ $totalParticipantsInternal }};
+                            const pct = total > 0 ? Math.round((ctx.parsed / total) * 100) : 0;
+                            return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Donut External
+    new Chart(document.getElementById('externalDonutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Terserap', 'Hadir  ', 'Tidak Hadir'],
+            datasets: [{
+                data: [{{ $totalAbsorbedExternal }}, {{ $totalAttendedExternal - $totalAbsorbedExternal }}, {{ $totalParticipantsExternal - $totalAttendedExternal }}],
+                backgroundColor: ['#0ea5e9', '#10b981', '#e2e8f0'],
+                borderColor: ['#0284c7', '#059669', '#cbd5e1'],
+                borderWidth: 1,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '65%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            const total = {{ $totalParticipantsExternal }};
                             const pct = total > 0 ? Math.round((ctx.parsed / total) * 100) : 0;
                             return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
                         }
@@ -383,10 +440,18 @@
                     borderRadius: 6,
                 },
                 {
-                    label: 'Diterima',
-                    data: {!! json_encode($companyAcceptedCounts) !!},
-                    backgroundColor: 'rgba(99,102,241,0.85)',
-                    borderColor: '#4f46e5',
+                    label: 'Diterima (Lulusan USH)',
+                    data: {!! json_encode($companyAcceptedInternalCounts) !!},
+                    backgroundColor: '#4f46e5',
+                    borderColor: '#4338ca',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                },
+                {
+                    label: 'Diterima (Umum)',
+                    data: {!! json_encode($companyAcceptedExternalCounts) !!},
+                    backgroundColor: '#0ea5e9',
+                    borderColor: '#0284c7',
                     borderWidth: 1,
                     borderRadius: 6,
                 }
@@ -400,10 +465,10 @@
                 tooltip: {
                     callbacks: {
                         afterLabel: ctx => {
-                            if (ctx.datasetIndex === 1) {
+                            if (ctx.datasetIndex === 1 || ctx.datasetIndex === 2) {
                                 const lamar = ctx.chart.data.datasets[0].data[ctx.dataIndex];
                                 const diterima = ctx.parsed.y;
-                                return lamar > 0 ? `Keteserapan: ${Math.round((diterima/lamar)*100)}%` : '';
+                                return lamar > 0 ? `Keteserapan: ${Math.round((diterima/lamar)*100)}% dari total pelamar` : '';
                             }
                         }
                     }

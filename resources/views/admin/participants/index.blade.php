@@ -14,6 +14,56 @@
 </div>
 @endif
 
+<style>
+    /* Custom Pagination Styling */
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        margin: 0;
+        gap: 0.35rem;
+        justify-content: flex-end;
+    }
+    .page-item .page-link {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #cbd5e1;
+        background: white;
+        color: #475569;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+    .page-item .page-link:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+    .page-item.active .page-link {
+        background: #1e40af;
+        color: white;
+        border-color: #1e40af;
+    }
+    .page-item.disabled .page-link {
+        color: #94a3b8;
+        background: #f8fafc;
+        cursor: not-allowed;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-top: 1px solid #e2e8f0;
+        background: #f8fafc;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+    .pagination-info {
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+</style>
+
 <div class="card">
     <div class="card-header" style="display: flex; flex-direction: column; gap: 1rem;">
         <h2 class="card-title" style="margin: 0;">Daftar Peserta</h2>
@@ -129,8 +179,13 @@
         </table>
     </div>
     @if($participants->hasPages())
-    <div style="padding: 1rem; border-top: 1px solid #e2e8f0;">
-        {{ $participants->links() }}
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Menampilkan <strong>{{ $participants->firstItem() }}</strong> - <strong>{{ $participants->lastItem() }}</strong> dari <strong>{{ $participants->total() }}</strong> peserta
+        </div>
+        <div>
+            {{ $participants->links('pagination::bootstrap-4') }}
+        </div>
     </div>
     @endif
 </div>

@@ -73,16 +73,19 @@ class CompanyLogoSeeder extends Seeder
                     'location' => 'Penempatan sesuai cabang',
                     'form_config' => [
                         [
+                            'id' => '1',
                             'label' => 'NIK',
                             'type' => 'text',
                             'required' => true,
                         ],
                         [
+                            'id' => '2',
                             'label' => 'Nama Lengkap',
                             'type' => 'text',
                             'required' => true,
                         ],
                         [
+                            'id' => '3',
                             'label' => 'CV / Resume',
                             'type' => 'file',
                             'required' => true,

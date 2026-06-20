@@ -69,8 +69,9 @@ class ApplicationController extends Controller
 
         // Simpan jawaban form dinamis
         $formConfig = $position->form_config ?? [];
-        foreach ($formConfig as $field) {
-            $fieldKey = 'field_' . $field['id'];
+        foreach ($formConfig as $index => $field) {
+            $fieldId = $field['id'] ?? $index;
+            $fieldKey = 'field_' . $fieldId;
             $answer = new ApplicationAnswer();
             $answer->application_id = $application->id;
             $answer->field_label    = $field['label'];
