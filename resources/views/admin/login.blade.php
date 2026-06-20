@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin - JobFair 2026</title>
-    
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
-    
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
 
     <!-- Main Content -->
     <div class="flex-1 flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
-            
+
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-white/10 mb-4 border border-white/20">
-                    <i class="fa-solid fa-user-shield text-3xl text-blue-400"></i>
+                <div class="inline-flex items-center justify-center h-16 w-16 ">
+                    <img src="{{ asset('template/LOGO USH NEW.png') }}" alt="" class="w-full h-full object-contain">
                 </div>
                 <h2 class="text-3xl font-bold text-white mb-2">
                     Admin Panel
@@ -50,7 +56,7 @@
             <!-- Login Card -->
             <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-200">
                 <form action="/admin" method="GET" class="space-y-5">
-                    
+
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email / Username</label>
                         <div class="relative">
@@ -85,16 +91,17 @@
                         Masuk ke Dashboard
                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     </button>
-                    
+
                 </form>
             </div>
-            
+
             <div class="mt-8 text-center text-sm text-slate-500">
                 <p>&copy; 2026 JobFair Administrator. Secure Login.</p>
             </div>
-            
+
         </div>
     </div>
 
 </body>
+
 </html>

@@ -55,7 +55,7 @@
             <img src="{{ asset('template/LOGO USH NEW.png') }}" alt="Logo">
         </div>
         <h1>Portal Perusahaan</h1>
-        <p class="subtitle">Masuk menggunakan kode login yang diberikan oleh panitia.</p>
+        <p class="subtitle">Portal Login Perusahaan</p>
 
         @if(session('error'))
         <div class="alert-error">
@@ -67,14 +67,14 @@
             @csrf
             <div class="form-group">
                 <label for="login_code">Kode Login Perusahaan</label>
-                <input type="text" id="login_code" name="login_code" placeholder="Contoh: COMP-001" required autofocus autocomplete="off">
+                <input type="text" id="login_code" name="login_code" placeholder="Masukan Code Login" required autofocus autocomplete="off">
                 @error('login_code')
                     <small style="color:#e11d48;margin-top:0.25rem;display:block;">{{ $message }}</small>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Sama dengan Kode Login" required>
+                <input type="password" id="password" name="password" placeholder="Masukan Password" required>
 
                 @error('password')
                     <small style="color:#e11d48;margin-top:0.25rem;display:block;">{{ $message }}</small>
