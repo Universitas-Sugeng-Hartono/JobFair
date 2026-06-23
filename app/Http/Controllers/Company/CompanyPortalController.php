@@ -125,7 +125,7 @@ class CompanyPortalController extends Controller
         $company = Auth::guard('company')->user();
 
         // Validasi kepemilikan pelamar
-        if ($application->position->company_id !== $company->id) {
+        if ($application->position->company_id != $company->id) {
             return back()->with('error', 'Anda tidak memiliki akses untuk mengubah status pelamar ini.');
         }
 
