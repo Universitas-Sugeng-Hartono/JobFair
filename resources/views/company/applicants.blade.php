@@ -172,64 +172,78 @@
                     </td>
                 </tr>
 
-                <!-- Modal Detail Lamaran -->
+                <!-- Modal for this application -->
                 <div id="modal-{{ $application->id }}" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.6);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-                    <div style="background:white;border-radius:12px;width:100%;max-width:620px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
+                    <div style="background:white;border-radius:12px;width:100%;max-width:800px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
                         <div style="padding:1.5rem;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <h3 style="font-size:1.1rem;font-weight:700;color:#0f172a;margin:0;">{{ $application->participant->name ?? '-' }}</h3>
-                                <p style="font-size:0.8rem;color:#64748b;margin:0.25rem 0 0;">{{ $application->position->name ?? '-' }}</p>
-                            </div>
+                            <h3 style="font-size:1.1rem;font-weight:700;color:#0f172a;margin:0;">Detail Lamaran: {{ $application->participant->name }}</h3>
                             <button type="button" onclick="document.getElementById('modal-{{ $application->id }}').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         <div style="padding:1.5rem;overflow-y:auto;">
-                            @if($application->answers->count() > 0)
-                            <div style="display:flex;flex-direction:column;gap:1.25rem;">
-                                @foreach($application->answers as $answer)
-                                <div style="background:#f8fafc;padding:1rem;border-radius:8px;border:1px solid #f1f5f9;">
-                                    <div style="font-size:0.8rem;font-weight:600;color:#64748b;margin-bottom:0.25rem;">{{ $answer->field_label }}</div>
-                                    <div style="font-size:0.95rem;color:#0f172a;font-weight:500;">
-                                        @if($answer->field_type === 'file')
-                                        @if($answer->file_path)
-                                        <a href="{{ asset('storage/' . $answer->file_path) }}" target="_blank" class="btn btn-primary" style="padding:0.4rem 0.8rem;font-size:0.8rem;">
-                                            <i class="fa-solid fa-eye"></i> Lihat File
-                                        </a>
-                                        @else
-                                        <span style="color:#94a3b8;font-style:italic;">Tidak ada file</span>
-                                        @endif
-                                        @else
-                                        {{ $answer->field_value ?? '-' }}
-                                        @endif
+                            <!-- Dynamic Answers -->
+                            <div style="background:#f8fafc; padding:1.5rem; margin-top:0; border-radius:8px;">
+                                <h5 style="margin-top:0; color:#334155; font-size:0.9rem; margin-bottom:1rem; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem;">Data Tambahan (Form Builder)</h5>
+                                @php
+                                    $payload = $application->answers_payload ?? [];
+                                @endphp
+                                @if(count($payload) > 0)
+                                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                                        @foreach($payload as $answer)
+                                            @if(isset($answer['type']) && $answer['type'] === 'step')
+                                                <div style="grid-column: 1 / -1; margin-top: 0.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">
+                                                    <h6 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin: 0;">{{ $answer['label'] }}</h6>
+                                                </div>
+                                            @else
+                                                <div>
+                                                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">{{ $answer['label'] }}</div>
+                                                    @if(isset($answer['type']) && $answer['type'] === 'file' && !empty($answer['path']))
+                                                        @php
+                                                            // Handle multiple files if separated by comma
+                                                            $paths = explode(',', $answer['path']);
+                                                        @endphp
+                                                        @foreach($paths as $path)
+                                                            <a href="{{ asset('storage/' . trim($path)) }}" target="_blank" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; display:inline-flex; align-items:center; gap:0.25rem; margin-right: 0.25rem; margin-bottom: 0.25rem;">
+                                                                <i class="fa-solid fa-download"></i> Lihat File
+                                                            </a>
+                                                        @endforeach
+                                                    @else
+                                                        <div style="font-size: 0.875rem; color: #0f172a;">{{ $answer['value'] ?? '-' }}</div>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endforeach
                                     </div>
-                                </div>
-                                @endforeach
+                                @else
+                                    <p style="font-size: 0.875rem; color: #94a3b8; margin: 0;">Tidak ada data tambahan.</p>
+                                @endif
                             </div>
-                            @else
-                            <p style="color:#64748b;font-style:italic;text-align:center;padding:2rem 0;">Tidak ada data form tambahan.</p>
-                            @endif
                         </div>
-                        <div style="padding:1rem 1.5rem;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                @if($application->status !== 'accepted')
-                                <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
-                                    @csrf @method('PATCH')
-                                    <input type="hidden" name="status" value="accepted">
-                                    <button type="submit" style="background:#6366f1;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;margin-right:0.5rem;" onclick="return confirm('Terima pelamar ini?')">
-                                        <i class="fa-solid fa-check"></i> Terima
-                                    </button>
-                                </form>
-                                @endif
-                                @if($application->status !== 'rejected')
-                                <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
-                                    @csrf @method('PATCH')
-                                    <input type="hidden" name="status" value="rejected">
-                                    <button type="submit" style="background:#ef4444;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;" onclick="return confirm('Tolak pelamar ini?')">
-                                        <i class="fa-solid fa-xmark"></i> Tolak
-                                    </button>
-                                </form>
-                                @endif
+                            <div style="padding:1rem 1.5rem;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+                                <div>
+                                    @if($application->status !== 'accepted')
+                                    <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
+                                        @csrf @method('PATCH')
+                                        <input type="hidden" name="status" value="accepted">
+                                        <button type="submit" style="background:#6366f1;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;margin-right:0.5rem;" onclick="return confirm('Terima pelamar ini?')">
+                                            <i class="fa-solid fa-check"></i> Terima
+                                        </button>
+                                    </form>
+                                    @endif
+                                    @if($application->status !== 'rejected')
+                                    <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
+                                        @csrf @method('PATCH')
+                                        <input type="hidden" name="status" value="rejected">
+                                        <button type="submit" style="background:#ef4444;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;" onclick="return confirm('Tolak pelamar ini?')">
+                                            <i class="fa-solid fa-xmark"></i> Tolak
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
+                                <div>
+                                    <span style="font-size:0.875rem;color:#64748b;margin-right: 1rem;">Waktu: {{ $application->created_at->format('d/m/y H:i') }}</span>
+                                    <button type="button" class="btn btn-outline" onclick="document.getElementById('modal-{{ $application->id }}').style.display='none'">Tutup</button>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-outline" onclick="document.getElementById('modal-{{ $application->id }}').style.display='none'">Tutup</button>
                         </div>
                     </div>
                 </div>

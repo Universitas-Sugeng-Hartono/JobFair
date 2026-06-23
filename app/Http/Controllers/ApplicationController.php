@@ -67,23 +67,32 @@ class ApplicationController extends Controller
             'status'         => 'submitted',
         ]);
 
-        // Simpan jawaban form dinamis
+        // Simpan jawaban form dinamis ke dalam JSON
         $formConfig = $position->form_config ?? [];
+        $payload = [];
+        
         foreach ($formConfig as $index => $field) {
             $fieldId = $field['id'] ?? $index;
             $fieldKey = 'field_' . $fieldId;
 
             if (isset($field['type']) && $field['type'] === 'step') {
-                continue; // Jangan simpan pembatas section sebagai jawaban
+                $payload[] = [
+                    'label' => $field['label'] ?? 'Section',
+                    'type'  => 'step',
+                    'value' => null,
+                    'path'  => null,
+                ];
+                continue;
             }
 
-            // Jika field tidak dikirim (mungkin di-skip oleh jump logic), set null atau kosong
             $inputValue = $request->input($fieldKey);
-
-            $answer = new ApplicationAnswer();
-            $answer->application_id = $application->id;
-            $answer->field_label    = $field['label'] ?? 'Unknown';
-            $answer->field_type     = $field['type'] ?? 'text';
+            
+            $answerData = [
+                'label' => $field['label'] ?? 'Unknown',
+                'type'  => $field['type'] ?? 'text',
+                'value' => null,
+                'path'  => null,
+            ];
 
             if ($field['type'] === 'file') {
                 if ($request->hasFile($fieldKey)) {
@@ -91,16 +100,16 @@ class ApplicationController extends Controller
                     if (!is_array($files)) {
                         $files = [$files];
                     }
+                    
+                    // Jika multiple file, kita bisa simpan path-nya dipisah koma atau array (di sini kita gabung dengan koma)
+                    $paths = [];
                     foreach ($files as $file) {
-                        $fileAnswer = new ApplicationAnswer();
-                        $fileAnswer->application_id = $application->id;
-                        $fileAnswer->field_label    = $field['label'] ?? 'Unknown';
-                        $fileAnswer->field_type     = $field['type'] ?? 'file';
-                        $fileAnswer->file_path      = $file->store('applications/' . $application->id, 'public');
-                        $fileAnswer->save();
+                        $paths[] = $file->store('applications/' . $application->id, 'public');
                     }
+                    $answerData['path'] = implode(',', $paths);
+                } else {
+                    $answerData['value'] = '-';
                 }
-                continue; // Skip saving the initial empty $answer object
             } else {
                 if (is_array($inputValue)) {
                     $inputValue = implode(', ', $inputValue);
@@ -111,11 +120,14 @@ class ApplicationController extends Controller
                     $inputValue = '-';
                 }
                 
-                $answer->field_value = $inputValue;
+                $answerData['value'] = $inputValue;
             }
 
-            $answer->save();
+            $payload[] = $answerData;
         }
+
+        // Update application dengan payload JSON
+        $application->update(['answers_payload' => $payload]);
 
         return redirect()->route('participant.index')
             ->with('success', 'Lamaran Anda ke posisi ' . $position->name . ' di ' . $company->name . ' berhasil dikirim!')

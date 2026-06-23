@@ -94,7 +94,7 @@ class CompanyPortalController extends Controller
 
         $positionIds = $company->positions->pluck('id');
 
-        $query = Application::with(['participant', 'position', 'answers'])
+        $query = Application::with(['participant', 'position'])
             ->whereIn('position_id', $positionIds)
             ->whereHas('participant', function($q) use ($request) {
                 $q->whereNotNull('attended_at');
