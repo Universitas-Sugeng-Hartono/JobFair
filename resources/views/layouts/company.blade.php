@@ -112,6 +112,11 @@
                 <i class="fa-solid fa-circle-check" style="margin-right: 0.5rem;"></i> {{ session('success') }}
             </div>
             @endif
+            @if(session('error'))
+            <div style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #fecaca;">
+                <i class="fa-solid fa-circle-exclamation" style="margin-right: 0.5rem;"></i> {{ session('error') }}
+            </div>
+            @endif
             @yield('content')
         </main>
     </div>

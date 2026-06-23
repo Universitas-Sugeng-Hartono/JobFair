@@ -22,6 +22,9 @@ class ParticipantController extends Controller
             },
             'applications as submitted_count' => function ($query) {
                 $query->where('status', 'submitted');
+            },
+            'applications as reviewed_count' => function ($query) {
+                $query->where('status', 'reviewed');
             }
         ])->latest();
 

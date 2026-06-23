@@ -44,18 +44,6 @@
     </p>
 </div>
 
-<!-- Flash messages -->
-@if(session('success'))
-<div style="background:#dcfce7; color:#16a34a; padding:1rem; border-radius:8px; margin-bottom:1.5rem; font-weight:500;">
-    <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
-</div>
-@endif
-@if(session('error'))
-<div style="background:#fee2e2; color:#991b1b; padding:1rem; border-radius:8px; margin-bottom:1.5rem; font-weight:500;">
-    <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
-</div>
-@endif
-
 <!-- Filter -->
 <div class="card" style="margin-bottom:1.5rem;">
     <div class="card-body" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;padding:1rem;">
