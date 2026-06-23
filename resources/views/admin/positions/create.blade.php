@@ -241,9 +241,17 @@
                     </div>
                     <input type="text" class="form-control" value="${field.label}" onchange="updateFieldLabel('${field.id}', this.value)" placeholder="Label inputan..." style="padding: 0.5rem; font-size: 0.875rem;">
                     
-                    <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
-                        <input type="checkbox" id="req_${field.id}" ${field.required ? 'checked' : ''} onchange="updateFieldRequired('${field.id}', this.checked)">
-                        <label for="req_${field.id}">Wajib Diisi</label>
+                    <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 1rem; font-size: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="req_${field.id}" ${field.required ? 'checked' : ''} onchange="updateFieldRequired('${field.id}', this.checked)">
+                            <label for="req_${field.id}">Wajib Diisi</label>
+                        </div>
+                        ${field.type === 'file' ? `
+                        <div style="display: flex; align-items: center; gap: 0.5rem; border-left: 1px solid #cbd5e1; padding-left: 1rem;">
+                            <label for="max_${field.id}">Maksimal File:</label>
+                            <input type="number" id="max_${field.id}" min="1" max="10" value="${field.max_files || 1}" onchange="updateFieldMaxFiles('${field.id}', this.value)" style="padding: 0.25rem 0.5rem; width: 60px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
                 <button type="button" class="btn btn-danger" onclick="removeFormField('${field.id}')" title="Hapus Input">
@@ -270,12 +278,16 @@
     }
 
     function addFormField(type) {
-        formFields.push({
+        let newField = {
             id: generateId(),
             type: type,
             label: type === 'file' ? 'Upload Dokumen' : (type === 'number' ? 'NIK / Nomor' : 'Pertanyaan / Input'),
             required: true
-        });
+        };
+        if (type === 'file') {
+            newField.max_files = 1;
+        }
+        formFields.push(newField);
         renderFields();
     }
 
@@ -294,6 +306,11 @@
     function updateFieldRequired(id, isRequired) {
         const field = formFields.find(f => f.id === id);
         if(field) field.required = isRequired;
+    }
+
+    function updateFieldMaxFiles(id, maxFiles) {
+        const field = formFields.find(f => f.id === id);
+        if(field) field.max_files = parseInt(maxFiles) || 1;
     }
 
     function prepareFormSubmit() {

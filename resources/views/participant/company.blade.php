@@ -86,7 +86,7 @@
                             </div>
                         @endif
                         @if($company->description)
-                            <p class="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto sm:mx-0">{{ $company->description }}</p>
+                            <p class="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto sm:mx-0 text-justify sm:text-left">{{ $company->description }}</p>
                         @endif
                     </div>
                 </div>

@@ -85,11 +85,14 @@
                                         {{ $field['label'] }} {!! !empty($field['required']) ? '<span class="text-red-500">*</span>' : '' !!}
                                     </label>
                                     @if($field['type'] === 'file')
+                                        @php $maxFiles = $field['max_files'] ?? 1; @endphp
                                         <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:bg-slate-50 hover:border-blue-300 transition relative overflow-hidden group">
-                                            <input type="file" name="field_{{ $fieldId }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" {{ !empty($field['required']) ? 'required' : '' }} onchange="updateFileName(this)">
+                                            <input type="file" name="field_{{ $fieldId }}{{ $maxFiles > 1 ? '[]' : '' }}" {{ $maxFiles > 1 ? 'multiple' : '' }} data-max="{{ $maxFiles }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" {{ !empty($field['required']) ? 'required' : '' }} onchange="updateFileName(this)">
                                             <div class="file-display flex flex-col items-center justify-center pointer-events-none relative z-0">
                                                 <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-2 group-hover:text-blue-400 transition-colors file-icon"></i>
-                                                <p class="text-sm text-slate-600 file-name line-clamp-1 px-4">Klik atau seret file ke sini</p>
+                                                <p class="text-sm text-slate-600 file-name line-clamp-1 px-4">
+                                                    Klik atau seret {{ $maxFiles > 1 ? 'maksimal ' . $maxFiles . ' ' : '' }}file ke sini
+                                                </p>
                                             </div>
                                         </div>
                                     @elseif($field['type'] === 'textarea')
@@ -117,10 +120,21 @@
             const displayDiv = input.nextElementSibling;
             const fileNameElem = displayDiv.querySelector('.file-name');
             const iconElem = displayDiv.querySelector('.file-icon');
+            const maxFiles = parseInt(input.getAttribute('data-max')) || 1;
             
             if (input.files && input.files.length > 0) {
+                if (input.files.length > maxFiles) {
+                    alert('Maksimal ' + maxFiles + ' file yang dapat diupload.');
+                    input.value = ''; // reset
+                    return updateFileName(input);
+                }
+
                 // Saat file dipilih
-                fileNameElem.textContent = input.files[0].name;
+                if (input.files.length === 1) {
+                    fileNameElem.textContent = input.files[0].name;
+                } else {
+                    fileNameElem.textContent = input.files.length + ' file terpilih';
+                }
                 fileNameElem.classList.remove('text-slate-600');
                 fileNameElem.classList.add('text-blue-600', 'font-semibold');
                 
@@ -128,7 +142,7 @@
                 input.parentElement.classList.add('border-blue-300', 'bg-blue-50/30');
             } else {
                 // Saat di-reset / cancel
-                fileNameElem.textContent = 'Klik atau seret file ke sini';
+                fileNameElem.textContent = 'Klik atau seret ' + (maxFiles > 1 ? 'maksimal ' + maxFiles + ' ' : '') + 'file ke sini';
                 fileNameElem.classList.add('text-slate-600');
                 fileNameElem.classList.remove('text-blue-600', 'font-semibold');
                 

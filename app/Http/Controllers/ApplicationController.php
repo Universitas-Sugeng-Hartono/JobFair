@@ -79,8 +79,20 @@ class ApplicationController extends Controller
 
             if ($field['type'] === 'file') {
                 if ($request->hasFile($fieldKey)) {
-                    $answer->file_path = $request->file($fieldKey)->store('applications/' . $application->id, 'public');
+                    $files = $request->file($fieldKey);
+                    if (!is_array($files)) {
+                        $files = [$files];
+                    }
+                    foreach ($files as $file) {
+                        $answer = new ApplicationAnswer();
+                        $answer->application_id = $application->id;
+                        $answer->field_label    = $field['label'];
+                        $answer->field_type     = $field['type'];
+                        $answer->file_path      = $file->store('applications/' . $application->id, 'public');
+                        $answer->save();
+                    }
                 }
+                continue; // Skip saving the initial empty $answer object
             } else {
                 $answer->field_value = $request->input($fieldKey);
             }
