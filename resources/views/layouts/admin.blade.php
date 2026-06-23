@@ -167,9 +167,12 @@
                             <i class="fa-solid fa-gear" style="width: 20px;"></i> Pengaturan
                         </a>
                         <div style="border-top: 1px solid #f1f5f9; margin: 0.25rem 0;"></div>
-                        <a href="{{ url('/admin/login') }}" class="profile-menu-item danger">
-                            <i class="fa-solid fa-right-from-bracket" style="width: 20px;"></i> Logout
-                        </a>
+                        <form action="{{ route('admin.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="profile-menu-item danger" style="width: 100%; border: none; background: none; cursor: pointer; text-align: left; font-family: inherit;">
+                                <i class="fa-solid fa-right-from-bracket" style="width: 20px;"></i> Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
 

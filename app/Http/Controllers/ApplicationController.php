@@ -72,10 +72,18 @@ class ApplicationController extends Controller
         foreach ($formConfig as $index => $field) {
             $fieldId = $field['id'] ?? $index;
             $fieldKey = 'field_' . $fieldId;
+
+            if (isset($field['type']) && $field['type'] === 'step') {
+                continue; // Jangan simpan pembatas section sebagai jawaban
+            }
+
+            // Jika field tidak dikirim (mungkin di-skip oleh jump logic), set null atau kosong
+            $inputValue = $request->input($fieldKey);
+
             $answer = new ApplicationAnswer();
             $answer->application_id = $application->id;
-            $answer->field_label    = $field['label'];
-            $answer->field_type     = $field['type'];
+            $answer->field_label    = $field['label'] ?? 'Unknown';
+            $answer->field_type     = $field['type'] ?? 'text';
 
             if ($field['type'] === 'file') {
                 if ($request->hasFile($fieldKey)) {
@@ -84,17 +92,26 @@ class ApplicationController extends Controller
                         $files = [$files];
                     }
                     foreach ($files as $file) {
-                        $answer = new ApplicationAnswer();
-                        $answer->application_id = $application->id;
-                        $answer->field_label    = $field['label'];
-                        $answer->field_type     = $field['type'];
-                        $answer->file_path      = $file->store('applications/' . $application->id, 'public');
-                        $answer->save();
+                        $fileAnswer = new ApplicationAnswer();
+                        $fileAnswer->application_id = $application->id;
+                        $fileAnswer->field_label    = $field['label'] ?? 'Unknown';
+                        $fileAnswer->field_type     = $field['type'] ?? 'file';
+                        $fileAnswer->file_path      = $file->store('applications/' . $application->id, 'public');
+                        $fileAnswer->save();
                     }
                 }
                 continue; // Skip saving the initial empty $answer object
             } else {
-                $answer->field_value = $request->input($fieldKey);
+                if (is_array($inputValue)) {
+                    $inputValue = implode(', ', $inputValue);
+                }
+                
+                // Jika data kosong, simpan sebagai "-"
+                if (is_null($inputValue) || trim($inputValue) === '') {
+                    $inputValue = '-';
+                }
+                
+                $answer->field_value = $inputValue;
             }
 
             $answer->save();
