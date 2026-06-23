@@ -377,6 +377,11 @@
                                         <i class="fa-solid fa-briefcase text-[9px]"></i> {{ Str::limit($pos->name, 22) }}
                                     </span>
                                 @endforeach
+                                @if($positionCount > 2)
+                                    <span class="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full flex items-center whitespace-nowrap">
+                                        +{{ $positionCount - 2 }} lainnya
+                                    </span>
+                                @endif
                             </div>
 
                             <!-- Lokasi Perusahaan -->
