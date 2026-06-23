@@ -68,7 +68,7 @@
                         Portal Perusahaan
                     </span>
                     <span style="font-size: 0.75rem; color: var(--text-muted);">
-                        {{ session('company_name', 'Perusahaan') }}
+                        {{ Auth::guard('company')->user()->name ?? 'Perusahaan' }}
                     </span>
                 </div>
             </div>
@@ -77,12 +77,12 @@
                 <div class="dropdown" id="profileDropdown">
                     <div class="user-profile" style="cursor: pointer; display: flex; align-items: center; gap: 0.75rem;" onclick="toggleDropdown('profileDropdown')">
                         <div class="user-info" style="text-align: right;">
-                            <div class="user-name">{{ session('company_name', '-') }}</div>
+                            <div class="user-name">{{ Auth::guard('company')->user()->name ?? '-' }}</div>
                             <div class="user-role">Perusahaan Mitra</div>
                         </div>
                         <div class="user-avatar" style="background: linear-gradient(135deg, #14b8a6, #0f766e); font-size: 1.1rem; color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0;">
-                            @if(session('company_logo'))
-                                <img src="{{ asset('storage/' . session('company_logo')) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            @if(Auth::guard('company')->user()->logo_path)
+                                <img src="{{ asset('storage/' . Auth::guard('company')->user()->logo_path) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                             @else
                                 <i class="fa-solid fa-building"></i>
                             @endif
@@ -91,7 +91,7 @@
                     </div>
                     <div class="dropdown-menu" style="min-width: 200px;">
                         <div style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">
-                            <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">{{ session('company_name', '-') }}</div>
+                            <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">{{ Auth::guard('company')->user()->name ?? '-' }}</div>
                             <div style="font-size: 0.8rem; color: #64748b;">Perusahaan Mitra JobFair</div>
                         </div>
                         <form action="{{ route('company.logout') }}" method="POST">

@@ -78,6 +78,10 @@
                             <span style="background:#fee2e2;color:#991b1b;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
                                 <i class="fa-solid fa-circle-xmark"></i> Ditolak
                             </span>
+                        @elseif($application->status === 'reviewed')
+                            <span style="background:#dbeafe;color:#1d4ed8;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
+                                <i class="fa-solid fa-users-viewfinder"></i> Sedang Interview
+                            </span>
                         @else
                             <span style="background:#f1f5f9;color:#475569;padding:0.25rem 0.6rem;border-radius:6px;font-size:0.8rem;font-weight:600;">
                                 <i class="fa-regular fa-clock"></i> Menunggu

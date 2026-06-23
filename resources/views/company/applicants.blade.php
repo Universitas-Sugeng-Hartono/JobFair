@@ -24,6 +24,11 @@
         color: #991b1b;
     }
 
+    .status-reviewed {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
     .status-submitted {
         background: #f1f5f9;
         color: #475569;
@@ -75,6 +80,7 @@
             style="padding:0.6rem 1rem;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:0.875rem;color:#0f172a;background:white;cursor:pointer;min-width:160px;">
             <option value="">— Semua Status —</option>
             <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Menunggu</option>
+            <option value="reviewed" {{ request('status') === 'reviewed' ? 'selected' : '' }}>Sedang Interview</option>
             <option value="accepted" {{ request('status') === 'accepted'  ? 'selected' : '' }}>Diterima</option>
             <option value="rejected" {{ request('status') === 'rejected'  ? 'selected' : '' }}>Ditolak</option>
         </select>
@@ -109,6 +115,8 @@
                         <span class="status-badge status-accepted"><i class="fa-solid fa-circle-check"></i> Diterima</span>
                         @elseif($application->status === 'rejected')
                         <span class="status-badge status-rejected"><i class="fa-solid fa-circle-xmark"></i> Ditolak</span>
+                        @elseif($application->status === 'reviewed')
+                        <span class="status-badge status-reviewed"><i class="fa-solid fa-users-viewfinder"></i> Sedang Interview</span>
                         @else
                         <span class="status-badge status-submitted"><i class="fa-regular fa-clock"></i> Menunggu</span>
                         @endif
@@ -120,8 +128,19 @@
                             onclick="document.getElementById('modal-{{ $application->id }}').style.display='flex'">
                             <i class="fa-solid fa-list-check"></i> Detail
                         </button>
+
                         @if($application->status === 'submitted')
-                        <form action="{{ route('applications.status', $application->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
+                            @csrf @method('PATCH')
+                            <input type="hidden" name="status" value="reviewed">
+                            <button type="submit"
+                                style="background:#3b82f6;color:white;border:none;padding:0.3rem 0.6rem;border-radius:6px;font-size:0.8rem;cursor:pointer;"
+                                onclick="return confirm('Tandai peserta ini hadir di Booth dan mulai interview?')">
+                                <i class="fa-solid fa-check"></i> Hadir di Booth
+                            </button>
+                        </form>
+                        @elseif($application->status === 'reviewed')
+                        <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
                             @csrf @method('PATCH')
                             <input type="hidden" name="status" value="accepted">
                             <button type="submit"
@@ -130,7 +149,7 @@
                                 <i class="fa-solid fa-check"></i> Terima
                             </button>
                         </form>
-                        <form action="{{ route('applications.status', $application->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
                             @csrf @method('PATCH')
                             <input type="hidden" name="status" value="rejected">
                             <button type="submit"
@@ -140,12 +159,12 @@
                             </button>
                         </form>
                         @else
-                        <form action="{{ route('applications.status', $application->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
                             @csrf @method('PATCH')
-                            <input type="hidden" name="status" value="submitted">
+                            <input type="hidden" name="status" value="reviewed">
                             <button type="submit"
                                 style="background:#f59e0b;color:white;border:none;padding:0.3rem 0.6rem;border-radius:6px;font-size:0.8rem;cursor:pointer;"
-                                onclick="return confirm('Reset status ke Menunggu?')">
+                                onclick="return confirm('Reset status ke Sedang Interview?')">
                                 <i class="fa-solid fa-rotate-left"></i>
                             </button>
                         </form>
@@ -192,7 +211,7 @@
                         <div style="padding:1rem 1.5rem;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
                             <div>
                                 @if($application->status !== 'accepted')
-                                <form action="{{ route('applications.status', $application->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
                                     @csrf @method('PATCH')
                                     <input type="hidden" name="status" value="accepted">
                                     <button type="submit" style="background:#6366f1;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;margin-right:0.5rem;" onclick="return confirm('Terima pelamar ini?')">
@@ -201,7 +220,7 @@
                                 </form>
                                 @endif
                                 @if($application->status !== 'rejected')
-                                <form action="{{ route('applications.status', $application->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('company.applications.status', $application->id) }}" method="POST" style="display:inline;">
                                     @csrf @method('PATCH')
                                     <input type="hidden" name="status" value="rejected">
                                     <button type="submit" style="background:#ef4444;color:white;border:none;padding:0.5rem 1rem;border-radius:6px;font-size:0.875rem;cursor:pointer;" onclick="return confirm('Tolak pelamar ini?')">

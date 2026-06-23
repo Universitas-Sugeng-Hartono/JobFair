@@ -37,7 +37,7 @@ class DashboardController extends Controller
         // Chart data: applications per company (only attended participants)
         $companiesChart = \App\Models\Company::withCount([
             'applications as attended_applications_count' => function ($q) {
-                $q->whereHas('participant', fn($p) => $p->whereNotNull('attended_at'));
+                $q->whereIn('status', ['reviewed', 'accepted', 'rejected']);
             },
             'applications as accepted_internal_count' => function ($q) {
                 $q->where('status', 'accepted')
