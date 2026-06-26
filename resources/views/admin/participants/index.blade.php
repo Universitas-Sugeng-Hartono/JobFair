@@ -150,8 +150,10 @@
                     <td>
                         @if($participant->accepted_count > 0)
                             <span style="color: #16a34a; font-weight: 600; font-size: 0.9rem;">Diterima</span>
-                        @elseif($participant->rejected_count > 0 && $participant->submitted_count == 0)
+                        @elseif($participant->rejected_count > 0 && $participant->submitted_count == 0 && $participant->reviewed_count == 0)
                             <span style="color: #dc2626; font-weight: 600; font-size: 0.9rem;">Ditolak</span>
+                        @elseif($participant->reviewed_count > 0)
+                            <span style="color: #1d4ed8; font-weight: 600; font-size: 0.9rem;">Sedang Interview</span>
                         @elseif($participant->submitted_count > 0)
                             <span style="color: #64748b; font-weight: 600; font-size: 0.9rem;">Menunggu</span>
                         @else

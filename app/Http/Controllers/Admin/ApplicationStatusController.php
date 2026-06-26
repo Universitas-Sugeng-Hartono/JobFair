@@ -14,7 +14,7 @@ class ApplicationStatusController extends Controller
     public function update(Request $request, Application $application)
     {
         $request->validate([
-            'status' => 'required|in:submitted,accepted,rejected'
+            'status' => 'required|in:submitted,reviewed,accepted,rejected'
         ]);
 
         $application->status = $request->status;

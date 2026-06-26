@@ -248,48 +248,82 @@
         </div>
     </section>
     
-        <!-- ===== HOW IT WORKS ===== -->
-    <section id="how-it-works" class="py-12 sm:py-16 lg:py-20">
+        <!-- ===== EVENT INFO & LOCATION ===== -->
+    <section id="event-info" class="py-12 sm:py-16 lg:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-10 sm:mb-16">
                 <span class="inline-block mb-3 sm:mb-4 bg-violet-100 text-violet-900 text-xs font-semibold px-3 py-1 rounded-full">
-                    Cara Kerja
+                    Informasi Acara
                 </span>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4 px-4">3 Langkah Menuju Karir Impian</h2>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4 px-4">Detail Pelaksanaan JobFair</h2>
             </div>
 
-            <div class="grid sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 relative overflow-hidden">
-                    <div class="absolute -bottom-4 -right-4 opacity-10">
-                        <img src="{{ asset('template/template3.png') }}" alt="" class="w-28 h-28 object-cover select-none" draggable="false">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+                <!-- Kiri: Informasi Lokasi -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 border border-slate-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-900">Informasi Lokasi</h3>
                     </div>
-                    <div class="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                        <span class="text-2xl sm:text-3xl font-bold">1</span>
+                    
+                    <div class="space-y-4 text-slate-600">
+                        <p class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mt-1 text-violet-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            <span><strong>{{ $settings['event_location'] ?? 'Universitas Sugeng Hartono' }}</strong><br>{{ $settings['event_location_desc'] ?? 'Jl. Raya Solo - Baki, Sukoharjo, Jawa Tengah' }}</span>
+                        </p>
+                        <p class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mt-1 text-violet-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span><strong>Tanggal Pelaksanaan:</strong><br>{{ $settings['event_date'] ?? '3 - 10 Juni 2026' }}</span>
+                        </p>
+                        <p class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mt-1 text-violet-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span><strong>Waktu:</strong><br>{{ $settings['event_time'] ?? '08.00 WIB - Selesai' }}</span>
+                        </p>
                     </div>
-                    <h3 class="text-center text-base sm:text-lg font-semibold mb-2">Daftar &amp; Verifikasi</h3>
-                    <p class="text-center text-blue-100 text-sm sm:text-base">Buat akun menggunakan NIK dan data pribadi. Tunggu HR menghubungi Anda.</p>
+
+                    <div class="mt-8 rounded-xl overflow-hidden shadow-inner border border-slate-100">
+                        <div class="bg-slate-100 aspect-video flex items-center justify-center overflow-hidden">
+                            <iframe 
+                                src="{{ $settings['event_maps_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.9126607212456!2d110.803875!3d-7.5844883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a15ec7abf2ad3%3A0x6b8dd829dd868cd7!2sUniversitas%20Sugeng%20Hartono!5e0!3m2!1sen!2sid!4v1717462000000!5m2!1sen!2sid' }}" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-violet-500 to-violet-600 text-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 relative overflow-hidden">
-                    <div class="absolute -bottom-4 -right-4 opacity-10">
-                        <img src="{{ asset('template/template1.png') }}" alt="" class="w-28 h-28 object-cover select-none" draggable="false">
+                <!-- Kanan: Deskripsi Acara -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 border border-slate-100 h-full">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-900">Deskripsi Acara</h3>
                     </div>
-                    <div class="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                        <span class="text-2xl sm:text-3xl font-bold">2</span>
-                    </div>
-                    <h3 class="text-center text-base sm:text-lg font-semibold mb-2">Jelajahi Perusahaan</h3>
-                    <p class="text-center text-violet-100 text-sm sm:text-base">Lihat profil 12 perusahaan, persyaratan, dan posisi yang tersedia.</p>
-                </div>
 
-                <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 relative overflow-hidden">
-                    <div class="absolute -bottom-4 -right-4 opacity-10">
-                        <img src="{{ asset('template/template2.png') }}" alt="" class="w-28 h-28 object-cover select-none" draggable="false">
+                    <div class="prose prose-slate prose-sm sm:prose-base text-slate-600">
+                        {!! $settings['event_description'] ?? '
+                        <p class="mb-4">
+                            <strong>JobFair Universitas Sugeng Hartono</strong> adalah wadah pertemuan strategis antara para pencari kerja (alumni, mahasiswa tingkat akhir, dan masyarakat umum) dengan perusahaan-perusahaan terkemuka yang sedang mencari talenta terbaik.
+                        </p>
+                        <p class="mb-4">
+                            Acara ini bertujuan untuk memfasilitasi penyerapan tenaga kerja secara efektif dan efisien. Para peserta dapat berinteraksi langsung dengan perwakilan HR dari berbagai perusahaan, mendapatkan wawasan mengenai dunia kerja, serta melamar posisi yang sesuai dengan minat dan kompetensi mereka.
+                        </p>
+                        <h4 class="text-lg font-semibold text-slate-800 mt-6 mb-3">Mengapa Anda Harus Hadir?</h4>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li>Kesempatan emas bertemu langsung dengan HRD.</li>
+                            <li>Tersedia berbagai pilihan posisi dari perusahaan ternama.</li>
+                            <li>Proses pendaftaran dan pelamaran yang terintegrasi secara digital.</li>
+                            <li>Memperluas relasi dan jaringan profesional Anda.</li>
+                        </ul>
+                        ' !!}
                     </div>
-                    <div class="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                        <span class="text-2xl sm:text-3xl font-bold">3</span>
-                    </div>
-                    <h3 class="text-center text-base sm:text-lg font-semibold mb-2">Lamar &amp; Tunggu</h3>
-                    <p class="text-center text-emerald-100 text-sm sm:text-base">Lamar hingga 12 perusahaan dan tunggu panggilan interview dari HR.</p>
                 </div>
             </div>
         </div>
@@ -343,6 +377,11 @@
                                         <i class="fa-solid fa-briefcase text-[9px]"></i> {{ Str::limit($pos->name, 22) }}
                                     </span>
                                 @endforeach
+                                @if($positionCount > 2)
+                                    <span class="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full flex items-center whitespace-nowrap">
+                                        +{{ $positionCount - 2 }} lainnya
+                                    </span>
+                                @endif
                             </div>
 
                             <!-- Lokasi Perusahaan -->
@@ -434,6 +473,15 @@
                     <div class="space-y-3 sm:space-y-4">
                         <div class="flex items-start gap-3 sm:gap-4">
                             <div class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-violet-400 text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-base sm:text-lg">{{ $settings['event_location'] ?? 'Universitas Sugeng Hartono' }}</div>
+                                <div class="text-slate-300 text-sm">{{ $settings['event_location_desc'] ?? 'Jl. Raya Solo - Baki, Sukoharjo, Jawa Tengah' }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 sm:gap-4">
+                            <div class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
                                 <i class="fa-regular fa-calendar text-blue-400 text-lg sm:text-xl"></i>
                             </div>
                             <div>
@@ -443,20 +491,11 @@
                         </div>
                         <div class="flex items-start gap-3 sm:gap-4">
                             <div class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-location-dot text-violet-400 text-lg sm:text-xl"></i>
+                                <i class="fa-regular fa-clock text-emerald-400 text-lg sm:text-xl"></i>
                             </div>
                             <div>
-                                <div class="font-semibold text-base sm:text-lg">{{ $settings['event_location'] ?? 'Online Platform' }}</div>
-                                <div class="text-slate-300 text-sm">{{ $settings['event_location_desc'] ?? 'Akses dari mana saja, kapan saja' }}</div>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 sm:gap-4">
-                            <div class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-users text-emerald-400 text-lg sm:text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-base sm:text-lg">{{ $settings['event_quota_title'] ?? 'Kuota Terbatas' }}</div>
-                                <div class="text-slate-300 text-sm">{{ $settings['event_quota_desc'] ?? 'Hanya ' . ($settings['stat_2_value'] ?? '250') . ' peserta yang akan diterima' }}</div>
+                                <div class="font-semibold text-base sm:text-lg">{{ $settings['event_time'] ?? '08.00 WIB - Selesai' }}</div>
+                                <div class="text-slate-300 text-sm">Waktu Pelaksanaan Acara</div>
                             </div>
                         </div>
                     </div>

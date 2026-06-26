@@ -67,26 +67,67 @@ class ApplicationController extends Controller
             'status'         => 'submitted',
         ]);
 
-        // Simpan jawaban form dinamis
+        // Simpan jawaban form dinamis ke dalam JSON
         $formConfig = $position->form_config ?? [];
+        $payload = [];
+        
         foreach ($formConfig as $index => $field) {
             $fieldId = $field['id'] ?? $index;
             $fieldKey = 'field_' . $fieldId;
-            $answer = new ApplicationAnswer();
-            $answer->application_id = $application->id;
-            $answer->field_label    = $field['label'];
-            $answer->field_type     = $field['type'];
+
+            if (isset($field['type']) && $field['type'] === 'step') {
+                $payload[] = [
+                    'label' => $field['label'] ?? 'Section',
+                    'type'  => 'step',
+                    'value' => null,
+                    'path'  => null,
+                ];
+                continue;
+            }
+
+            $inputValue = $request->input($fieldKey);
+            
+            $answerData = [
+                'label' => $field['label'] ?? 'Unknown',
+                'type'  => $field['type'] ?? 'text',
+                'value' => null,
+                'path'  => null,
+            ];
 
             if ($field['type'] === 'file') {
                 if ($request->hasFile($fieldKey)) {
-                    $answer->file_path = $request->file($fieldKey)->store('applications/' . $application->id, 'public');
+                    $files = $request->file($fieldKey);
+                    if (!is_array($files)) {
+                        $files = [$files];
+                    }
+                    
+                    // Jika multiple file, kita bisa simpan path-nya dipisah koma atau array (di sini kita gabung dengan koma)
+                    $paths = [];
+                    foreach ($files as $file) {
+                        $paths[] = $file->store('applications/' . $application->id, 'public');
+                    }
+                    $answerData['path'] = implode(',', $paths);
+                } else {
+                    $answerData['value'] = '-';
                 }
             } else {
-                $answer->field_value = $request->input($fieldKey);
+                if (is_array($inputValue)) {
+                    $inputValue = implode(', ', $inputValue);
+                }
+                
+                // Jika data kosong, simpan sebagai "-"
+                if (is_null($inputValue) || trim($inputValue) === '') {
+                    $inputValue = '-';
+                }
+                
+                $answerData['value'] = $inputValue;
             }
 
-            $answer->save();
+            $payload[] = $answerData;
         }
+
+        // Update application dengan payload JSON
+        $application->update(['answers_payload' => $payload]);
 
         return redirect()->route('participant.index')
             ->with('success', 'Lamaran Anda ke posisi ' . $position->name . ' di ' . $company->name . ' berhasil dikirim!')

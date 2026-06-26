@@ -171,7 +171,18 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Waktu Event</label>
+                        <input type="text" name="event_time" value="{{ $settings['event_time'] ?? '08.00 WIB - Selesai' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">URL Google Maps (Embed src)</label>
+                        <input type="text" name="event_maps_url" value="{{ $settings['event_maps_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.9126607212456!2d110.803875!3d-7.5844883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a15ec7abf2ad3%3A0x6b8dd829dd868cd7!2sUniversitas%20Sugeng%20Hartono!5e0!3m2!1sen!2sid!4v1717462000000!5m2!1sen!2sid' }}" placeholder="Contoh: https://www.google.com/maps/embed?pb=..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.25rem;">
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Info Kuota</label>
                         <input type="text" name="event_quota_title" value="{{ $settings['event_quota_title'] ?? 'Kuota Terbatas' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
@@ -180,6 +191,24 @@
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Keterangan Kuota</label>
                         <input type="text" name="event_quota_desc" value="{{ $settings['event_quota_desc'] ?? 'Hanya 250 peserta yang akan diterima' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
                     </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Deskripsi Acara Lengkap</label>
+                    <textarea id="summernote" name="event_description" rows="10" placeholder="Ketik deskripsi acara di sini..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">{{ $settings['event_description'] ?? '
+<p class="mb-4">
+    <strong>JobFair Universitas Sugeng Hartono</strong> adalah wadah pertemuan strategis antara para pencari kerja (alumni, mahasiswa tingkat akhir, dan masyarakat umum) dengan perusahaan-perusahaan terkemuka yang sedang mencari talenta terbaik.
+</p>
+<p class="mb-4">
+    Acara ini bertujuan untuk memfasilitasi penyerapan tenaga kerja secara efektif dan efisien. Para peserta dapat berinteraksi langsung dengan perwakilan HR dari berbagai perusahaan, mendapatkan wawasan mengenai dunia kerja, serta melamar posisi yang sesuai dengan minat dan kompetensi mereka.
+</p>
+<h4 class="text-lg font-semibold text-slate-800 mt-6 mb-3">Mengapa Anda Harus Hadir?</h4>
+<ul class="space-y-2 list-disc list-inside">
+    <li>Kesempatan emas bertemu langsung dengan HRD.</li>
+    <li>Tersedia berbagai pilihan posisi dari perusahaan ternama.</li>
+    <li>Proses pendaftaran dan pelamaran yang terintegrasi secara digital.</li>
+    <li>Memperluas relasi dan jaringan profesional Anda.</li>
+</ul>' }}</textarea>
                 </div>
 
             </div>
@@ -212,3 +241,35 @@
 </form>
 
 @endsection
+
+@stack('styles')
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+    .note-editor .note-editing-area { font-family: 'Inter', sans-serif; }
+    .note-editor.note-frame { border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; }
+    .note-toolbar { background-color: #f8fafc; border-bottom: 1px solid #cbd5e1; }
+</style>
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            placeholder: 'Ketik deskripsi acara di sini...',
+            tabsize: 2,
+            height: 200,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+</script>
+@endpush

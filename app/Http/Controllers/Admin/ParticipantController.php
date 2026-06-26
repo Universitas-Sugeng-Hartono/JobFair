@@ -22,6 +22,9 @@ class ParticipantController extends Controller
             },
             'applications as submitted_count' => function ($query) {
                 $query->where('status', 'submitted');
+            },
+            'applications as reviewed_count' => function ($query) {
+                $query->where('status', 'reviewed');
             }
         ])->latest();
 
@@ -89,7 +92,7 @@ class ParticipantController extends Controller
     
     public function show(string $id)
     {
-        $participant = Participant::with('applications.position.company', 'applications.answers')->findOrFail($id);
+        $participant = Participant::with('applications.position.company')->findOrFail($id);
         return view('admin.participants.show', compact('participant'));
     }
 

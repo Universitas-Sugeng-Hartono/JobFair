@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyPortalController extends Controller
 {
@@ -14,7 +14,7 @@ class CompanyPortalController extends Controller
 
     public function showLogin()
     {
-        if (session('company_id')) {
+        if (Auth::guard('company')->check()) {
             return redirect()->route('company.dashboard');
         }
         return view('company.login');
@@ -22,29 +22,29 @@ class CompanyPortalController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'login_code' => 'required|string',
             'password'   => 'required|string',
         ]);
 
-        $company = Company::where('login_code', strtoupper(trim($request->login_code)))->first();
-
-        if (!$company || !Hash::check($request->password, $company->password)) {
-            return redirect()->back()->with('error', 'Kode login atau password salah.');
+        if (Auth::guard('company')->attempt([
+            'login_code' => strtoupper(trim($request->login_code)),
+            'password' => $request->password,
+        ], $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->route('company.dashboard');
         }
 
-        session([
-            'company_id'   => $company->id,
-            'company_name' => $company->name,
-            'company_logo' => $company->logo_path,
-        ]);
-
-        return redirect()->route('company.dashboard');
+        return redirect()->back()->with('error', 'Kode login atau password salah.');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget(['company_id', 'company_name', 'company_logo']);
+        Auth::guard('company')->logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('company.login');
     }
 
@@ -52,14 +52,16 @@ class CompanyPortalController extends Controller
 
     public function dashboard()
     {
-        $company = Company::with('positions')->findOrFail(session('company_id'));
+        $companyId = Auth::guard('company')->id();
+        $company = Company::with('positions')->findOrFail($companyId);
 
         $positionIds = $company->positions->pluck('id');
 
         $totalPositions   = $company->positions->count();
         $totalApplicants  = Application::whereIn('position_id', $positionIds)->count();
+        // Pelamar yang sudah masuk ke Booth (Sedang Interview / Diterima / Ditolak)
         $attendedApplicants = Application::whereIn('position_id', $positionIds)
-            ->whereHas('participant', fn($q) => $q->whereNotNull('attended_at'))
+            ->whereIn('status', ['reviewed', 'accepted', 'rejected'])
             ->count();
         $acceptedApplicants = Application::whereIn('position_id', $positionIds)
             ->where('status', 'accepted')
@@ -67,8 +69,9 @@ class CompanyPortalController extends Controller
 
         // Per-position stats
         $positions = $company->positions->map(function ($pos) {
-            $apps = $pos->applications()->with('participant')->get();
-            $attended = $apps->filter(fn($a) => $a->participant?->attended_at !== null);
+            $apps = $pos->applications;
+            // Attended = Sudah ditandai hadir di booth (reviewed, accepted, rejected)
+            $attended = $apps->filter(fn($a) => in_array($a->status, ['reviewed', 'accepted', 'rejected']));
             $pos->applications_count = $apps->count();
             $pos->attended_count     = $attended->count();
             $pos->accepted_count     = $attended->where('status', 'accepted')->count();
@@ -86,11 +89,12 @@ class CompanyPortalController extends Controller
 
     public function applicants(Request $request)
     {
-        $company = Company::with('positions')->findOrFail(session('company_id'));
+        $companyId = Auth::guard('company')->id();
+        $company = Company::with('positions')->findOrFail($companyId);
 
         $positionIds = $company->positions->pluck('id');
 
-        $query = Application::with(['participant', 'position', 'answers'])
+        $query = Application::with(['participant', 'position'])
             ->whereIn('position_id', $positionIds)
             ->whereHas('participant', function($q) use ($request) {
                 $q->whereNotNull('attended_at');
@@ -114,5 +118,33 @@ class CompanyPortalController extends Controller
         $applications = $query->latest()->paginate(15);
 
         return view('company.applicants', compact('company', 'applications'));
+    }
+
+    public function updateStatus(Request $request, Application $application)
+    {
+        $company = Auth::guard('company')->user();
+
+        // Validasi kepemilikan pelamar
+        if ($application->position->company_id != $company->id) {
+            return back()->with('error', 'Anda tidak memiliki akses untuk mengubah status pelamar ini.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:submitted,reviewed,accepted,rejected'
+        ]);
+
+        $application->status = $request->status;
+        $application->save();
+
+        $message = 'Status pelamar berhasil diperbarui.';
+        if ($request->status === 'reviewed') {
+            $message = 'Pelamar ditandai hadir di booth (Sedang Interview).';
+        } elseif ($request->status === 'accepted') {
+            $message = 'Pelamar diterima.';
+        } elseif ($request->status === 'rejected') {
+            $message = 'Pelamar ditolak.';
+        }
+
+        return back()->with('success', $message);
     }
 }

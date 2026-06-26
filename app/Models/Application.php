@@ -14,10 +14,12 @@ class Application extends Model
         'position_id',
         'status',
         'accepted_at',
+        'answers_payload',
     ];
 
     protected $casts = [
         'accepted_at' => 'datetime',
+        'answers_payload' => 'array',
     ];
 
     public function participant()

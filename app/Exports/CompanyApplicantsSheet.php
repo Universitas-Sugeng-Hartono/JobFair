@@ -20,6 +20,7 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
     protected $dynamicFieldLabels = [];
     protected $rowNumber = 0;
     protected $productionUrl;
+    protected $sectionColumns = [];
 
     public function __construct(Company $company, Position $position)
     {
@@ -28,11 +29,17 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
         $this->productionUrl = \App\Models\Setting::where('key', 'production_url')->value('value');
         
         $formConfig = $this->position->form_config ?? [];
+        $colIndex = 6; // Data starts at column F (which is index 6: A=1, B=2, C=3, D=4, E=5)
+        
         foreach ($formConfig as $field) {
             $labelLower = strtolower(trim($field['label']));
             if (!in_array($labelLower, ['nik', 'nama', 'nama lengkap', 'nama peserta'])) {
                 if (!in_array($field['label'], $this->dynamicFieldLabels)) {
                     $this->dynamicFieldLabels[] = $field['label'];
+                    if (isset($field['type']) && $field['type'] === 'step') {
+                        $this->sectionColumns[] = $colIndex;
+                    }
+                    $colIndex++;
                 }
             }
         }
@@ -40,7 +47,7 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
 
     public function collection()
     {
-        return Application::with(['participant', 'answers', 'position'])
+        return Application::with(['participant', 'position'])
             ->whereHas('participant', function ($query) {
                 $query->whereNotNull('attended_at');
             })
@@ -74,28 +81,41 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
             $application->created_at->format('d/m/Y H:i:s'),
         ];
 
-        // Map answers by label
+        // Map answers by label from answers_payload
         $answersByLabel = [];
-        foreach ($application->answers as $answer) {
-            $answersByLabel[$answer->field_label] = $answer;
+        $payload = $application->answers_payload ?? [];
+        foreach ($payload as $answer) {
+            if (isset($answer['label'])) {
+                $answersByLabel[$answer['label']] = $answer;
+            }
         }
 
+        $colIndex = 6;
         foreach ($this->dynamicFieldLabels as $label) {
-            if (isset($answersByLabel[$label])) {
+            if (in_array($colIndex, $this->sectionColumns)) {
+                $row[] = ''; // Keep it blank for data rows
+            } elseif (isset($answersByLabel[$label])) {
                 $ans = $answersByLabel[$label];
-                if ($ans->field_type === 'file' && $ans->file_path) {
-                    if ($this->productionUrl) {
-                        $baseUrl = rtrim($this->productionUrl, '/');
-                        $row[] = $baseUrl . '/storage/' . $ans->file_path;
-                    } else {
-                        $row[] = asset('storage/' . $ans->file_path);
+                if (isset($ans['type']) && $ans['type'] === 'file' && !empty($ans['path'])) {
+                    // if there are multiple files, just use the first or join URLs. Let's join URLs with comma.
+                    $paths = explode(',', $ans['path']);
+                    $urls = [];
+                    foreach($paths as $path) {
+                        if ($this->productionUrl) {
+                            $baseUrl = rtrim($this->productionUrl, '/');
+                            $urls[] = $baseUrl . '/storage/' . trim($path);
+                        } else {
+                            $urls[] = asset('storage/' . trim($path));
+                        }
                     }
+                    $row[] = implode(', ', $urls);
                 } else {
-                    $row[] = $ans->field_value ?? '-';
+                    $row[] = $ans['value'] ?? '-';
                 }
             } else {
                 $row[] = '-';
             }
+            $colIndex++;
         }
 
         return $row;
@@ -110,8 +130,7 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
 
     public function styles(Worksheet $sheet)
     {
-        return [
-            
+        $styles = [
             1    => [
                 'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFFFF']],
                 'fill' => [
@@ -120,5 +139,19 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
                 ]
             ],
         ];
+
+        // Colorize section headers differently
+        foreach ($this->sectionColumns as $colIndex) {
+            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex);
+            $styles[$columnLetter . '1'] = [
+                'font' => ['bold' => true, 'color' => ['argb' => 'FF000000']],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['argb' => 'FFFACC15'] // Yellow for section headers
+                ]
+            ];
+        }
+
+        return $styles;
     }
 }

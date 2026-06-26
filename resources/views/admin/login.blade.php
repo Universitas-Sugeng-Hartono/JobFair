@@ -55,15 +55,24 @@
 
             <!-- Login Card -->
             <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-200">
-                <form action="/admin" method="GET" class="space-y-5">
-                
+                @if($errors->any())
+                    <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+                            <span class="text-sm font-medium text-red-800">{{ $errors->first() }}</span>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('admin.login.post') }}" method="POST" class="space-y-5">
+                    @csrf
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email / Username</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fa-regular fa-envelope text-slate-400"></i>
                             </div>
-                            <input type="email" id="email" class="pl-10 block w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Masukan Email Anda" required>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" class="pl-10 block w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Masukan Email Anda" required autofocus>
                         </div>
                     </div>
 
@@ -73,15 +82,12 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fa-solid fa-lock text-slate-400"></i>
                             </div>
-                            <input type="password" id="password" class="pl-10 block w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Masukan Password Anda" required>
-                        </div>
-                        <div class="flex justify-end mt-2">
-                            <a href="#" class="text-xs text-blue-600 hover:text-blue-700 hover:underline">Lupa password?</a>
+                            <input type="password" name="password" id="password" class="pl-10 block w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow" placeholder="Masukan Password Anda" required>
                         </div>
                     </div>
 
                     <div class="flex items-center">
-                        <input id="remember" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
+                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
                         <label for="remember" class="ml-2 block text-sm text-slate-600">
                             Ingat saya
                         </label>

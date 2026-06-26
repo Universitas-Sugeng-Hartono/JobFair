@@ -86,9 +86,13 @@ class CompanyController extends Controller
         ];
 
         if ($request->filled('login_code')) {
-            $data['login_code'] = strtoupper(trim($request->login_code));
-            // Password otomatis disamakan dengan login_code
-            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['login_code']);
+            $newLoginCode = strtoupper(trim($request->login_code));
+            $data['login_code'] = $newLoginCode;
+            
+            // Hanya ubah password jika login_code benar-benar berubah dari sebelumnya
+            if ($newLoginCode !== $company->login_code) {
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($newLoginCode);
+            }
         }
 
         if ($request->hasFile('logo')) {
