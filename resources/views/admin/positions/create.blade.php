@@ -166,6 +166,19 @@
                 <textarea name="requirements" id="requirements" rows="4" class="form-control" placeholder="Tuliskan syarat minimal..."></textarea>
             </div>
             
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">Informasi Tambahan (Opsional)</h3>
+                <button type="button" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="addInfoRow()">
+                    <i class="fa-solid fa-plus"></i> Tambah Info
+                </button>
+            </div>
+            <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">Tambahkan informasi spesifik lain seperti Kompetensi Teknis, Benefit, dll.</p>
+            
+            <div id="additional-info-container">
+                <!-- Rows here -->
+            </div>
+            
         </div>
 
         <!-- Kolom Kanan: Form Builder -->
@@ -298,6 +311,24 @@
 
     function prepareFormSubmit() {
         document.getElementById('form_config_input').value = JSON.stringify(formFields);
+    }
+
+    function addInfoRow(label = '', value = '') {
+        const container = document.getElementById('additional-info-container');
+        const rowId = 'info_' + Math.random().toString(36).substr(2, 9);
+        const row = document.createElement('div');
+        row.id = rowId;
+        row.style = "display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;";
+        row.innerHTML = `
+            <div style="flex: 1;">
+                <input type="text" name="add_info_label[]" class="form-control" placeholder="Label (Misal: Kompetensi)" value="${label}" required>
+            </div>
+            <div style="flex: 2;">
+                <textarea name="add_info_value[]" class="form-control" rows="2" placeholder="Isi informasi..." required>${value}</textarea>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('${rowId}').remove()" style="padding: 0.75rem;"><i class="fa-solid fa-trash"></i></button>
+        `;
+        container.appendChild(row);
     }
 
     renderFields();

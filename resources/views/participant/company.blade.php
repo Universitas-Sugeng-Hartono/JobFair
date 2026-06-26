@@ -158,6 +158,19 @@
                             <div class="text-sm text-slate-600 pl-5 leading-relaxed border-l-2 border-slate-200 rich-text">{!! $pos->requirements !!}</div>
                         </div>
                     @endif
+
+                    @if($pos->additional_info && is_array($pos->additional_info))
+                        @foreach($pos->additional_info as $info)
+                            @if(isset($info['label']) && isset($info['value']))
+                                <div>
+                                    <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                                        {{ $info['label'] }}
+                                    </h5>
+                                    <div class="text-sm text-slate-600 pl-5 leading-relaxed border-l-2 border-slate-200 whitespace-pre-line">{{ $info['value'] }}</div>
+                                </div>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
 

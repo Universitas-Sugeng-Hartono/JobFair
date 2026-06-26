@@ -56,7 +56,7 @@
             <!-- Login Card -->
             <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-200">
                 <form action="/admin" method="GET" class="space-y-5">
-
+                
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email / Username</label>
                         <div class="relative">
