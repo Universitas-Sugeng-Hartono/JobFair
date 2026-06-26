@@ -174,7 +174,7 @@
                                             <h5 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
                                                 {{ $info['label'] }}
                                             </h5>
-                                            <div class="text-sm text-slate-600 pl-6 border-l-2 border-emerald-200 whitespace-pre-line">{{ $info['value'] }}</div>
+                                            <div class="text-sm text-slate-600 pl-6 border-l-2 border-emerald-200 rich-text">{!! $info['value'] !!}</div>
                                         </div>
                                     @endif
                                 @endforeach

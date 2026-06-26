@@ -413,17 +413,25 @@
         const rowId = 'info_' + Math.random().toString(36).substr(2, 9);
         const row = document.createElement('div');
         row.id = rowId;
-        row.style = "display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;";
+        row.style = "position: relative; padding: 1.5rem; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; background: #f8fafc;";
         row.innerHTML = `
-            <div style="flex: 1;">
-                <input type="text" name="add_info_label[]" class="form-control" placeholder="Label (Misal: Kompetensi)" value="${label}" required>
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('${rowId}').remove()" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem; border-radius: 6px;"><i class="fa-solid fa-trash"></i></button>
+            <div class="form-group" style="margin-right: 3rem; margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Label Info (Misal: Kompetensi)</label>
+                <input type="text" name="add_info_label[]" class="form-control" placeholder="Ketik label di sini..." required>
             </div>
-            <div style="flex: 2;">
-                <textarea name="add_info_value[]" class="form-control" rows="2" placeholder="Isi informasi..." required>${value}</textarea>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Isi Informasi</label>
+                <textarea id="add_info_value_${rowId}" name="add_info_value[]" class="form-control" rows="2" placeholder="Isi informasi..."></textarea>
             </div>
-            <button type="button" class="btn btn-danger" onclick="document.getElementById('${rowId}').remove()" style="padding: 0.75rem;"><i class="fa-solid fa-trash"></i></button>
         `;
+        
+        row.querySelector('input').value = label;
+        row.querySelector('textarea').value = value;
+        
         container.appendChild(row);
+        
+        ClassicEditor.create(document.querySelector(`#add_info_value_${rowId}`)).catch(error => console.error(error));
     }
 
     let existingAdditionalInfo = @json($position->additional_info ?? []);
