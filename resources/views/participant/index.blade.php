@@ -31,7 +31,7 @@
             <div class="flex items-center justify-between">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition">
                     @if(!empty($settings['logo_image']))
-                        <img src="{{ asset('storage/' . $settings['logo_image']) }}" alt="Logo" class="h-10 object-contain">
+                        <img src="{{ !empty($settings['logo_image']) ? asset('storage/' . $settings['logo_image']) : asset('images/default-logo.png') }}" alt="Logo" class="h-10 object-contain">
                     @else
                         <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-lg">
                             <i class="fa-solid fa-briefcase text-white"></i>
@@ -188,7 +188,7 @@
                         {{-- Logo + Nama --}}
                         <div class="flex items-center gap-3 mb-3">
                             <div class="h-12 w-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm flex-shrink-0 overflow-hidden p-1 {{ $isApplied ? 'ring-2 ring-emerald-300' : '' }}" style="min-width:48px;">
-                                <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
+                                <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-sm font-bold text-slate-800 line-clamp-2 leading-tight {{ $isApplied ? 'text-emerald-700' : 'group-hover:text-blue-600' }} transition-colors">

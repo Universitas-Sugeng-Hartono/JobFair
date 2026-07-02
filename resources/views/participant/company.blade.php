@@ -72,7 +72,7 @@
             <div class="px-6 sm:px-10 py-8">
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
                     <div class="h-28 w-28 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-5xl shadow-md flex-shrink-0 p-3">
-                        <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
+                        <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
                     </div>
                     <div class="flex-1">
                         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">{{ $company->name }}</h2>

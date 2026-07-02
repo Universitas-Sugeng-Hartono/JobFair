@@ -82,7 +82,7 @@
                         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row sm:items-center gap-5">
                             <div class="h-16 w-16 sm:h-20 sm:w-20 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm p-2 flex-shrink-0">
                                 @if($application->position && $application->position->company->logo_path)
-                                    <img src="{{ asset('storage/' . $application->position->company->logo_path) }}" alt="Logo" class="w-full h-full object-contain">
+                                    <img src="{{ $application->position->company->logo_path ? asset('storage/' . $application->position->company->logo_path) : asset('images/default-company-logo.png') }}" alt="Logo" class="w-full h-full object-contain">
                                 @else
                                     <i class="fa-regular fa-building text-2xl text-slate-400"></i>
                                 @endif

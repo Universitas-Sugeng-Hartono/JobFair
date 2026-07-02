@@ -46,7 +46,7 @@
         <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-300 overflow-hidden mb-6">
             <div class="p-6 bg-blue-50/50 border-b border-slate-100 flex items-center gap-4">
                 <div class="h-16 w-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm p-1">
-                    <img src="{{ asset('storage/' . $position->company->logo_path) }}" alt="Logo" class="w-full h-full object-contain">
+                    <img src="{{ $position->company->logo_path ? asset('storage/' . $position->company->logo_path) : asset('images/default-company-logo.png') }}" alt="Logo" class="w-full h-full object-contain">
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">{{ $position->name }}</h2>
