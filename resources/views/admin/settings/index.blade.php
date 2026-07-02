@@ -55,7 +55,7 @@
                     @if(!empty($settings['hero_image']))
                         <div style="margin-top: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; display:inline-block;">
                             <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">Gambar Saat Ini:</p>
-                            <img src="{{ asset('storage/' . $settings['hero_image']) }}" alt="Hero Image" style="max-height: 100px; display: block;">
+                            <img src="{{ !empty($settings['hero_image']) ? asset('storage/' . $settings['hero_image']) : asset('template/template2.png') }}" alt="Hero Image" style="max-height: 100px; display: block;">
                         </div>
                         <input type="hidden" name="hero_image" value="{{ $settings['hero_image'] }}">
                     @endif
@@ -85,7 +85,7 @@
                         @if(!empty($settings['logo_image']))
                             <div style="margin-top: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; display:inline-block;">
                                 <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">Logo Saat Ini:</p>
-                                <img src="{{ asset('storage/' . $settings['logo_image']) }}" alt="Logo" style="max-height: 40px; display: block;">
+                                <img src="{{ !empty($settings['logo_image']) ? asset('storage/' . $settings['logo_image']) : asset('images/default-logo.png') }}" alt="Logo" style="max-height: 40px; display: block;">
                             </div>
                             <input type="hidden" name="logo_image" value="{{ $settings['logo_image'] }}">
                         @endif

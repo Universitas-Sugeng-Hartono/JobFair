@@ -286,7 +286,7 @@
                         <td>
                             <div style="display:flex;align-items:center;gap:0.6rem;">
                                 @if($company->logo_path)
-                                    <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->name }}"
+                                    <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $company->name }}"
                                          style="width:32px;height:32px;border-radius:8px;object-fit:contain;border:1px solid #e2e8f0;flex-shrink:0;">
                                 @else
                                     <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem;flex-shrink:0;">

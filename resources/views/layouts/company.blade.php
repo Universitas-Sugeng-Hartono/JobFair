@@ -82,7 +82,7 @@
                         </div>
                         <div class="user-avatar" style="background: linear-gradient(135deg, #14b8a6, #0f766e); font-size: 1.1rem; color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0;">
                             @if(Auth::guard('company')->user()->logo_path)
-                                <img src="{{ asset('storage/' . Auth::guard('company')->user()->logo_path) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                <img src="{{ Auth::guard('company')->user()->logo_path ? asset('storage/' . Auth::guard('company')->user()->logo_path) : asset('images/default-company-logo.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                             @else
                                 <i class="fa-solid fa-building"></i>
                             @endif

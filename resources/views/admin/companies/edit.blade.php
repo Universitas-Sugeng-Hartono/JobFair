@@ -35,7 +35,7 @@
             <label for="logo" style="display: block; font-weight: 500; margin-bottom: 0.5rem;">Logo Perusahaan</label>
             @if($company->logo_path)
                 <div style="margin-bottom: 10px;">
-                    <img src="{{ asset('storage/' . $company->logo_path) }}" alt="Logo Saat Ini" style="max-height: 80px; border-radius: 8px; border: 1px solid #e2e8f0; padding: 4px;">
+                    <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="Logo Saat Ini" style="max-height: 80px; border-radius: 8px; border: 1px solid #e2e8f0; padding: 4px;">
                 </div>
             @endif
             <input type="file" name="logo" id="logo" class="form-control" accept="image/*" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1;">

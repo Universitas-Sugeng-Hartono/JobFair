@@ -83,7 +83,7 @@
                 <!-- Logo -->
                 <a href="/" class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                     @if(!empty($settings['logo_image']))
-                        <img src="{{ asset('storage/' . $settings['logo_image']) }}" alt="Logo" class="h-8 sm:h-10 object-contain">
+                        <img src="{{ !empty($settings['logo_image']) ? asset('storage/' . $settings['logo_image']) : asset('images/default-logo.png') }}" alt="Logo" class="h-8 sm:h-10 object-contain">
                     @else
                         <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                             <i class="fa-solid fa-briefcase text-white text-xs sm:text-sm"></i>
@@ -219,12 +219,12 @@
                         <div class="carousel-track flex gap-4 w-max py-2">
                             @foreach($companies as $item)
                             <div class="w-16 h-16 sm:w-24 sm:h-24 flex-shrink-0 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-base sm:text-xl shadow-lg overflow-hidden p-1.5">
-                                <img src="{{ asset('storage/' . $item->logo_path) }}" alt="{{ $item->name }}" class="w-full h-full object-contain drop-shadow-sm">
+                                <img src="{{ $item->logo_path ? asset('storage/' . $item->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $item->name }}" class="w-full h-full object-contain drop-shadow-sm">
                             </div>
                             @endforeach
                             @foreach($companies as $item)
                             <div class="w-16 h-16 sm:w-24 sm:h-24 flex-shrink-0 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-base sm:text-xl shadow-lg overflow-hidden p-1.5">
-                                <img src="{{ asset('storage/' . $item->logo_path) }}" alt="{{ $item->name }}" class="w-full h-full object-contain drop-shadow-sm">
+                                <img src="{{ $item->logo_path ? asset('storage/' . $item->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $item->name }}" class="w-full h-full object-contain drop-shadow-sm">
                             </div>
                             @endforeach
                         </div>
@@ -232,7 +232,7 @@
 
                     <!-- Main illustration -->
                     @if(!empty($settings['hero_image']))
-                        <img src="{{ asset('storage/' . $settings['hero_image']) }}"
+                        <img src="{{ !empty($settings['hero_image']) ? asset('storage/' . $settings['hero_image']) : asset('template/template2.png') }}"
                              alt="JobFair Illustration"
                              class="relative z-0 w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg drop-shadow-2xl select-none pb-16 sm:pb-20"
                              draggable="false">
@@ -358,7 +358,7 @@
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="h-12 w-12 sm:h-13 sm:w-13 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm flex-shrink-0 overflow-hidden p-1" style="width:52px;height:52px;">
                                     @if($company->logo_path && !Str::startsWith($company->logo_path, ['🏢','💻','🎨','🏦','🏭','🌏']))
-                                        <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
+                                        <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $company->name }}" class="w-full h-full object-contain">
                                     @else
                                         <span class="text-2xl">{{ $company->logo_path ?? '' }}</span>
                                     @endif
@@ -541,7 +541,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
                 <div class="flex items-center gap-3">
                     @if(!empty($settings['logo_image']))
-                        <img src="{{ asset('storage/' . $settings['logo_image']) }}" alt="Logo" class="h-10 object-contain">
+                        <img src="{{ !empty($settings['logo_image']) ? asset('storage/' . $settings['logo_image']) : asset('images/default-logo.png') }}" alt="Logo" class="h-10 object-contain">
                     @else
                         <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
                             <i class="fa-solid fa-briefcase text-white"></i>
