@@ -14,11 +14,13 @@ class Position extends Model
         'job_responsibilities',
         'requirements',
         'location',
-        'form_config'
+        'form_config',
+        'additional_info'
     ];
 
     protected $casts = [
         'form_config' => 'array',
+        'additional_info' => 'array',
     ];
 
     public function company()

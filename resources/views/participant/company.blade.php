@@ -167,6 +167,19 @@
                                 </div>
                             @endif
                             
+                            @if($pos->additional_info && is_array($pos->additional_info))
+                                @foreach($pos->additional_info as $info)
+                                    @if(isset($info['label']) && isset($info['value']))
+                                        <div>
+                                            <h5 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                                {{ $info['label'] }}
+                                            </h5>
+                                            <div class="text-sm text-slate-600 pl-6 border-l-2 border-emerald-200 rich-text">{!! $info['value'] !!}</div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endif
+                            
                             @if(!$pos->job_responsibilities && !$pos->requirements)
                                 <p class="text-sm text-slate-500 italic">Tidak ada deskripsi spesifik untuk posisi ini.</p>
                             @endif

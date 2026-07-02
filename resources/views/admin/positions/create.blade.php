@@ -173,6 +173,19 @@
             <textarea name="requirements" id="requirements" rows="4" class="form-control" placeholder="Tuliskan syarat minimal..."></textarea>
         </div>
         
+        <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">Informasi Tambahan (Opsional)</h3>
+            <button type="button" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="addInfoRow()">
+                <i class="fa-solid fa-plus"></i> Tambah Info
+            </button>
+        </div>
+        <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">Tambahkan informasi spesifik lain seperti Kompetensi Teknis, Benefit, dll.</p>
+        
+        <div id="additional-info-container">
+            <!-- Rows here -->
+        </div>
+        
         <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
             <a href="{{ route('positions.index') }}" class="btn btn-outline">Batal</a>
             <button type="button" class="btn btn-primary" onclick="showTab(2)">Selanjutnya: Form Builder <i class="fa-solid fa-arrow-right"></i></button>
@@ -487,6 +500,32 @@
 
     function prepareFormSubmit() {
         document.getElementById('form_config_input').value = JSON.stringify(formFields);
+    }
+
+    function addInfoRow(label = '', value = '') {
+        const container = document.getElementById('additional-info-container');
+        const rowId = 'info_' + Math.random().toString(36).substr(2, 9);
+        const row = document.createElement('div');
+        row.id = rowId;
+        row.style = "position: relative; padding: 1.5rem; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; background: #f8fafc;";
+        row.innerHTML = `
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('${rowId}').remove()" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem; border-radius: 6px;"><i class="fa-solid fa-trash"></i></button>
+            <div class="form-group" style="margin-right: 3rem; margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Label Info (Misal: Kompetensi)</label>
+                <input type="text" name="add_info_label[]" class="form-control" placeholder="Ketik label di sini..." required>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Isi Informasi</label>
+                <textarea id="add_info_value_${rowId}" name="add_info_value[]" class="form-control" rows="2" placeholder="Isi informasi..."></textarea>
+            </div>
+        `;
+        
+        row.querySelector('input').value = label;
+        row.querySelector('textarea').value = value;
+        
+        container.appendChild(row);
+        
+        ClassicEditor.create(document.querySelector(`#add_info_value_${rowId}`)).catch(error => console.error(error));
     }
 
     renderFields();

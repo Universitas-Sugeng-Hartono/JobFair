@@ -47,6 +47,21 @@ class PositionController extends Controller
         $data = $request->all();
         $data['form_config'] = $request->form_config ? json_decode($request->form_config, true) : null;
         
+        $additionalInfo = [];
+        if ($request->has('add_info_label') && $request->has('add_info_value')) {
+            $labels = $request->add_info_label;
+            $values = $request->add_info_value;
+            foreach ($labels as $index => $label) {
+                if (!empty($label) && !empty($values[$index])) {
+                    $additionalInfo[] = [
+                        'label' => $label,
+                        'value' => $values[$index]
+                    ];
+                }
+            }
+        }
+        $data['additional_info'] = count($additionalInfo) > 0 ? $additionalInfo : null;
+        
         Position::create($data);
         
         return redirect()->route('positions.index')->with('success', 'Lowongan berhasil ditambahkan.');
@@ -68,6 +83,21 @@ class PositionController extends Controller
         
         $data = $request->all();
         $data['form_config'] = $request->form_config ? json_decode($request->form_config, true) : null;
+        
+        $additionalInfo = [];
+        if ($request->has('add_info_label') && $request->has('add_info_value')) {
+            $labels = $request->add_info_label;
+            $values = $request->add_info_value;
+            foreach ($labels as $index => $label) {
+                if (!empty($label) && !empty($values[$index])) {
+                    $additionalInfo[] = [
+                        'label' => $label,
+                        'value' => $values[$index]
+                    ];
+                }
+            }
+        }
+        $data['additional_info'] = count($additionalInfo) > 0 ? $additionalInfo : null;
         
         $position->update($data);
         
