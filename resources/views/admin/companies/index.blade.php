@@ -36,7 +36,7 @@
                 <td style="padding: 1rem 1.5rem;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
                         <div style="width: 40px; height: 40px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; padding: 2px; flex-shrink: 0;">
-                            <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->name }}" style="width: 100%; height: 100%; object-fit: contain;">
+                            <img src="{{ $company->logo_path ? asset('storage/' . $company->logo_path) : asset('images/default-company-logo.png') }}" alt="{{ $company->name }}" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                         <div>
                             <div style="font-weight: 600; color: #0f172a;">{{ $company->name }}</div>
