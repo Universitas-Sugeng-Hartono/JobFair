@@ -168,7 +168,8 @@ class ParticipantController extends Controller
         ]);
 
         return redirect()->route('participant.index')
-            ->with('success', 'Pendaftaran berhasil! Selamat datang, ' . $name . '!');
+            ->with('success', 'Pendaftaran berhasil! Selamat datang, ' . $name . '!')
+            ->with('show_register_popup', true);
     }
 
     public function clearNik()

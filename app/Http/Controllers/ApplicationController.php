@@ -131,6 +131,7 @@ class ApplicationController extends Controller
 
         return redirect()->route('participant.index')
             ->with('success', 'Lamaran Anda ke posisi ' . $position->name . ' di ' . $company->name . ' berhasil dikirim!')
-            ->with('applied_position_id', $position->id);
+            ->with('applied_position_id', $position->id)
+            ->with('show_apply_popup', true);
     }
 }

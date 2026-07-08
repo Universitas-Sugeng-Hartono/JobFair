@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .hover-card { transition: all 0.3s ease; box-shadow: 0 4px 18px -2px rgba(0,0,0,0.12), 0 2px 8px -2px rgba(0,0,0,0.08); }
@@ -282,6 +283,26 @@
             }
             @endif
         } catch(e) {}
+
+        @if(session('show_register_popup'))
+        Swal.fire({
+            title: 'Pendaftaran Berhasil!',
+            text: 'Silakan mendaftar minimal 1 posisi di perusahaan yang tersedia.',
+            icon: 'info',
+            confirmButtonText: 'Baik, Mengerti',
+            confirmButtonColor: '#3b82f6'
+        });
+        @endif
+
+        @if(session('show_apply_popup'))
+        Swal.fire({
+            title: 'Lamaran Berhasil!',
+            html: `Terima kasih telah melamar.<br><br>Silakan hadir untuk tahap selanjutnya pada:<br><b>Tanggal:</b> {{ $settings['event_date'] ?? '-' }}<br><b>Waktu:</b> {{ $settings['event_time'] ?? '-' }}<br><b>Lokasi:</b> {{ $settings['event_location'] ?? '-' }}`,
+            icon: 'success',
+            confirmButtonText: 'Baik, Mengerti',
+            confirmButtonColor: '#10b981'
+        });
+        @endif
     </script>
     <x-bottom-nav active="companies" />
     <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
