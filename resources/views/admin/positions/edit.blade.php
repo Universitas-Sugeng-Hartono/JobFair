@@ -54,10 +54,7 @@
             <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $position->name) }}" required>
         </div>
 
-        <div class="form-group">
-            <label for="time_to_answer">Waktu Proses</label>
-            <input type="text" name="time_to_answer" id="time_to_answer" class="form-control" value="{{ old('time_to_answer', $position->time_to_answer) }}">
-        </div>
+
 
         <div class="form-group">
             <label for="selection">Tahapan Seleksi</label>

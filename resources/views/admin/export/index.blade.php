@@ -30,7 +30,7 @@
                 
                 <small style="display: block; margin-top: 0.75rem; color: #64748b; line-height: 1.5;">
                     <i class="fa-solid fa-circle-info" style="color: var(--secondary-blue);"></i>
-                    Hanya pelamar yang berstatus <strong style="color: #166534;">Hadir</strong> (telah di-scan) yang akan disertakan dalam laporan ini. File yang diunduh berbentuk <strong>.xlsx </strong>
+                    Semua pelamar yang mendaftar pada perusahaan ini akan disertakan dalam laporan ini. File yang diunduh berbentuk <strong>.xlsx </strong>
                 </small>
             </div>
 
@@ -38,6 +38,20 @@
                 <i class="fa-solid fa-download"></i> Ekspor Sekarang
             </button>
         </form>
+    </div>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto; margin-top: 2rem;">
+    <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-users-slash" style="margin-right: 0.5rem; color: #f59e0b;"></i> Unduh Pelamar Belum Melamar</h2>
+    </div>
+    <div class="card-body text-center">
+        <p style="color: #64748b; margin-bottom: 1.5rem;">
+            Unduh data seluruh peserta yang sudah melakukan registrasi/login, namun <strong>belum melamar ke perusahaan mana pun</strong>.
+        </p>
+        <a href="{{ route('export.unapplied') }}" class="btn" style="background-color: #f59e0b; color: white; width: 100%; padding: 0.8rem; font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; border-radius: 8px; text-decoration: none;">
+            <i class="fa-solid fa-download"></i> Ekspor Data Pelamar Belum Melamar
+        </a>
     </div>
 </div>
 @endsection

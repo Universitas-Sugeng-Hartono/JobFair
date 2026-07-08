@@ -148,10 +148,7 @@
             <input type="text" name="name" id="name" class="form-control" placeholder="Contoh: Staff IT, Marketing Executive, Akuntan" required>
         </div>
 
-        <div class="form-group">
-            <label for="time_to_answer">Waktu Proses (Time to Answer)</label>
-            <input type="text" name="time_to_answer" id="time_to_answer" class="form-control" placeholder="Contoh: 1-3 Hari Kerja">
-        </div>
+
 
         <div class="form-group">
             <label for="selection">Tahapan Seleksi</label>

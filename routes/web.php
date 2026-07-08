@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     // Admin Export
     Route::get('admin/export', [\App\Http\Controllers\Admin\ExportController::class, 'index'])->name('export.index');
     Route::post('admin/export/company', [\App\Http\Controllers\Admin\ExportController::class, 'exportCompany'])->name('export.company');
+    Route::get('admin/export/unapplied', [\App\Http\Controllers\Admin\ExportController::class, 'exportUnappliedParticipants'])->name('export.unapplied');
 
     // Admin Profile & Settings
     Route::get('admin/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('admin.profile');

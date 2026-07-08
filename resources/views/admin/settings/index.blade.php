@@ -152,7 +152,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.25rem;">
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Tanggal Event</label>
-                        <input type="text" name="event_date" value="{{ $settings['event_date'] ?? '3 - 10 Juni 2026' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
+                        <input type="date" name="event_date" value="{{ $settings['event_date'] ?? date('Y-m-d') }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Keterangan Tanggal</label>

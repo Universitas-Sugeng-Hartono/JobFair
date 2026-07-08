@@ -99,6 +99,16 @@
 
         @php
             $hasAppliedToCompany = count(array_intersect($companyPositions->pluck('id')->toArray(), $appliedPositionIds)) > 0;
+            $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
+            $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->startOfDay();
+            $today = \Carbon\Carbon::now()->startOfDay();
+            if ($today->lt($eventDateObj)) {
+                $waktuProses = $today->diffInDays($eventDateObj) . ' Hari';
+            } elseif ($today->gt($eventDateObj)) {
+                $waktuProses = 'Selesai';
+            } else {
+                $waktuProses = 'Hari ini';
+            }
         @endphp
 
         @if($hasAppliedToCompany || (isset($alreadyAppliedToThisCompany) && $alreadyAppliedToThisCompany))
@@ -126,9 +136,7 @@
                                 @if($pos->selection)
                                     <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-solid fa-clipboard-check mr-1 text-slate-400"></i>{{ $pos->selection }}</span>
                                 @endif
-                                @if($pos->time_to_answer)
-                                    <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>{{ $pos->time_to_answer }}</span>
-                                @endif
+                                    <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>Waktu Proses: {{ $waktuProses }}</span>
                             </div>
                         </div>
                     </div>

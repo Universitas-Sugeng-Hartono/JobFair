@@ -297,7 +297,7 @@
         @if(session('show_apply_popup'))
         Swal.fire({
             title: 'Lamaran Berhasil!',
-            html: `Terima kasih telah melamar.<br><br>Silakan hadir untuk tahap selanjutnya pada:<br><b>Tanggal:</b> {{ $settings['event_date'] ?? '-' }}<br><b>Waktu:</b> {{ $settings['event_time'] ?? '-' }}<br><b>Lokasi:</b> {{ $settings['event_location'] ?? '-' }}<br>{{ $settings['event_location_desc'] ?? '' }}`,
+            html: `Terima kasih telah melamar.<br><br>Silakan hadir untuk tahap selanjutnya pada:<br><b>Tanggal:</b> {{ isset($settings['event_date']) && strtotime($settings['event_date']) ? \Carbon\Carbon::parse($settings['event_date'])->locale('id')->translatedFormat('d F Y') : ($settings['event_date'] ?? '-') }}<br><b>Waktu:</b> {{ $settings['event_time'] ?? '-' }}<br><b>Lokasi:</b> {{ $settings['event_location'] ?? '-' }}<br>{{ $settings['event_location_desc'] ?? '' }}`,
             icon: 'success',
             confirmButtonText: 'Baik, Mengerti',
             confirmButtonColor: '#10b981'

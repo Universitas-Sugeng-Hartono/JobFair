@@ -48,9 +48,6 @@ class CompanyApplicantsSheet implements FromCollection, WithHeadings, WithMappin
     public function collection()
     {
         return Application::with(['participant', 'position'])
-            ->whereHas('participant', function ($query) {
-                $query->whereNotNull('attended_at');
-            })
             ->where('position_id', $this->position->id)
             ->oldest()
             ->get();

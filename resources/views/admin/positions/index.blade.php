@@ -69,7 +69,21 @@
                         {{ $position->selection ?? '-' }}
                     </td>
                     <td style="padding: 1rem 1.5rem; color: #64748b; font-size: 0.875rem;">
-                        {{ $position->time_to_answer ?? '-' }}
+                        @php
+                            $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
+                            $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->startOfDay();
+                            $today = \Carbon\Carbon::now()->startOfDay();
+                            
+                            if ($today->lt($eventDateObj)) {
+                                $diff = $today->diffInDays($eventDateObj);
+                                $waktuProses = $diff . ' Hari';
+                            } elseif ($today->gt($eventDateObj)) {
+                                $waktuProses = 'Selesai';
+                            } else {
+                                $waktuProses = 'Hari ini';
+                            }
+                        @endphp
+                        {{ $waktuProses }}
                     </td>
                     <td style="padding: 1rem 1.5rem;">
                         <span style="background: #f0fdf4; color: #166534; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; border: 1px solid #bbf7d0;">

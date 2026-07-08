@@ -27,4 +27,10 @@ class ExportController extends Controller
 
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CompanyApplicationExport($company), $filename);
     }
+
+    public function exportUnappliedParticipants()
+    {
+        $filename = 'Export_Pelamar_Belum_Melamar_' . date('Ymd_His') . '.xlsx';
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\UnappliedParticipantsExport(), $filename);
+    }
 }
