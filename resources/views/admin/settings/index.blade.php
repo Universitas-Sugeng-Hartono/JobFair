@@ -202,13 +202,14 @@
 <p class="mb-4">
     Acara ini bertujuan untuk memfasilitasi penyerapan tenaga kerja secara efektif dan efisien. Para peserta dapat berinteraksi langsung dengan perwakilan HR dari berbagai perusahaan, mendapatkan wawasan mengenai dunia kerja, serta melamar posisi yang sesuai dengan minat dan kompetensi mereka.
 </p>
-<h4 class="text-lg font-semibold text-slate-800 mt-6 mb-3">Mengapa Anda Harus Hadir?</h4>
-<ul class="space-y-2 list-disc list-inside">
-    <li>Kesempatan emas bertemu langsung dengan HRD.</li>
-    <li>Tersedia berbagai pilihan posisi dari perusahaan ternama.</li>
-    <li>Proses pendaftaran dan pelamaran yang terintegrasi secara digital.</li>
-    <li>Memperluas relasi dan jaringan profesional Anda.</li>
-</ul>' }}</textarea>
+<h4 class="text-lg font-semibold text-slate-800 mt-6 mb-3">Langkah-Langkah Mengikuti JobFair</h4>
+<ol class="space-y-2 list-decimal list-inside">
+    <li>Lakukan pendaftaran dengan memasukkan NIK dan Nama Anda.</li>
+    <li>Eksplorasi berbagai perusahaan dan posisi menarik yang tersedia.</li>
+    <li>Lamar posisi yang sesuai dengan minat dan kualifikasi Anda.</li>
+    <li>Anda diperbolehkan melamar ke <strong>lebih dari 1 perusahaan</strong>!</li>
+    <li>Hadir di lokasi JobFair sesuai jadwal untuk mengikuti proses seleksi selanjutnya.</li>
+</ol>' }}</textarea>
                 </div>
 
             </div>
