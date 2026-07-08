@@ -60,6 +60,15 @@
                 <p class="font-medium">{{ session('success') }}</p>
             </div>
         @endif
+        @if(session('just_logged_in') && isset($diffSeconds) && $diffSeconds > 0 && $diffSeconds < 36000)
+            <div id="countdown-notif" class="mb-6 flex items-center gap-3 bg-amber-50 border border-amber-300 text-amber-900 px-5 py-4 rounded-2xl shadow-md">
+                <i class="fa-solid fa-clock text-amber-500 text-xl"></i>
+                <div>
+                    <p class="font-bold">Peringatan: Acara akan dimulai dalam kurang dari 10 jam</p>
+                    <p class="text-sm">Waktu tersisa: <strong>{{ $waktuProses }}</strong>. Pastikan Anda siap hadir.</p>
+                </div>
+            </div>
+        @endif
         @if(session('error'))
             <div class="mb-6 flex items-center gap-3 bg-red-50 border border-red-300 text-red-800 px-5 py-4 rounded-2xl shadow-sm">
                 <i class="fa-solid fa-circle-exclamation text-red-600 text-xl"></i>
@@ -100,14 +109,29 @@
         @php
             $hasAppliedToCompany = count(array_intersect($companyPositions->pluck('id')->toArray(), $appliedPositionIds)) > 0;
             $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
-            $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->startOfDay();
-            $today = \Carbon\Carbon::now()->startOfDay();
-            if ($today->lt($eventDateObj)) {
-                $waktuProses = $today->diffInDays($eventDateObj) . ' Hari';
-            } elseif ($today->gt($eventDateObj)) {
+            try {
+                $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+            } catch (\Exception $e) {
+                try {
+                    $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                } catch (\Exception $e) {
+                    $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                }
+            }
+
+            $now = \Carbon\Carbon::now('Asia/Jakarta');
+            $diffSeconds = 0;
+            if ($now->lt($eventDateObj)) {
+                $diffSeconds = max(0, $eventDateObj->getTimestamp() - $now->getTimestamp());
+                $diffSeconds = (int) $diffSeconds;
+                $totalHours = floor($diffSeconds / 3600); // days*24 + hours
+                $minutes = floor(($diffSeconds % 3600) / 60);
+                $seconds = $diffSeconds % 60;
+                $waktuProses = sprintf('%d:%02d:%02d', $totalHours, $minutes, $seconds);
+            } elseif ($now->gt($eventDateObj)) {
                 $waktuProses = 'Selesai';
             } else {
-                $waktuProses = 'Hari ini';
+                $waktuProses = '0:00:00';
             }
         @endphp
 

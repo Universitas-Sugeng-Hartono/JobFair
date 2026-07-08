@@ -71,16 +71,29 @@
                     <td style="padding: 1rem 1.5rem; color: #64748b; font-size: 0.875rem;">
                         @php
                             $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
-                            $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->startOfDay();
-                            $today = \Carbon\Carbon::now()->startOfDay();
-                            
-                            if ($today->lt($eventDateObj)) {
-                                $diff = $today->diffInDays($eventDateObj);
-                                $waktuProses = $diff . ' Hari';
-                            } elseif ($today->gt($eventDateObj)) {
+                            try {
+                                $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+                            } catch (\Exception $e) {
+                                try {
+                                    $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                                } catch (\Exception $e) {
+                                    $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                                }
+                            }
+
+                            $now = \Carbon\Carbon::now('Asia/Jakarta');
+                            $diffSeconds = 0;
+                            if ($now->lt($eventDateObj)) {
+                                $diffSeconds = max(0, $eventDateObj->getTimestamp() - $now->getTimestamp());
+                                $diffSeconds = (int) $diffSeconds;
+                                $totalHours = floor($diffSeconds / 3600);
+                                $minutes = floor(($diffSeconds % 3600) / 60);
+                                $seconds = $diffSeconds % 60;
+                                $waktuProses = sprintf('%d:%02d:%02d', $totalHours, $minutes, $seconds);
+                            } elseif ($now->gt($eventDateObj)) {
                                 $waktuProses = 'Selesai';
                             } else {
-                                $waktuProses = 'Hari ini';
+                                $waktuProses = '0:00:00';
                             }
                         @endphp
                         {{ $waktuProses }}
