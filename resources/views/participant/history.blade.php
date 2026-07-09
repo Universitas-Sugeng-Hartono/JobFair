@@ -110,5 +110,6 @@
 
     <x-bottom-nav active="history" />
     <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
+    <x-participant-notifications />
 </body>
 </html>

@@ -196,4 +196,25 @@ class ParticipantController extends Controller
 
         return view('participant.history', compact('participant', 'applications', 'nik'));
     }
+
+    public function markNotificationRead($id)
+    {
+        $nik = session('participant_nik');
+        if (!$nik) {
+            return response()->json(['success' => false], 403);
+        }
+
+        $participant = Participant::where('nik', $nik)->first();
+        if (!$participant) {
+            return response()->json(['success' => false], 403);
+        }
+
+        $notification = \App\Models\ParticipantNotification::where('id', $id)
+            ->where('participant_id', $participant->id)
+            ->firstOrFail();
+
+        $notification->update(['is_read' => true]);
+
+        return response()->json(['success' => true]);
+    }
 }

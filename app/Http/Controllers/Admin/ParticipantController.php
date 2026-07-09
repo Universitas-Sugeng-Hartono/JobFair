@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Participant;
+use App\Models\ParticipantNotification;
+use App\Models\Setting;
 
 class ParticipantController extends Controller
 {
@@ -115,5 +117,31 @@ class ParticipantController extends Controller
         $participant->delete();
         
         return redirect()->route('participants.index')->with('success', 'Peserta berhasil dihapus');
+    }
+
+    public function sendAttendanceReminder(Request $request)
+    {
+        $settings = Setting::pluck('value', 'key');
+        $eventTime = $settings['event_time'] ?? '08.00 WIB - Selesai';
+        $eventLocation = $settings['event_location'] ?? 'Lokasi JobFair';
+
+        $title = 'Pengingat Kehadiran JobFair';
+        $message = "Peringatan: Harap hadir pada sesi JobFair pada hari Jum'at, tanggal 10 Juli 2026.\n\nWaktu: {$eventTime}\nLokasi: {$eventLocation}";
+
+        $participants = Participant::all();
+        $count = 0;
+
+        foreach ($participants as $participant) {
+            ParticipantNotification::create([
+                'participant_id' => $participant->id,
+                'title' => $title,
+                'message' => $message,
+                'type' => 'attendance_reminder',
+            ]);
+            $count++;
+        }
+
+        return redirect()->route('participants.index')
+            ->with('success', "Notifikasi kehadiran berhasil dikirim ke {$count} peserta.");
     }
 }

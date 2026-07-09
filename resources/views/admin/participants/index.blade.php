@@ -62,7 +62,14 @@
         font-size: 0.875rem;
         color: #64748b;
     }
+    #btnBroadcastNotif:hover {
+        background: #d97706;
+    }
 </style>
+
+<form action="{{ route('participants.broadcast-attendance') }}" method="POST" id="broadcastForm" style="display: none;">
+    @csrf
+</form>
 
 <div class="card">
     <div class="card-header" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -101,6 +108,10 @@
                     <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>Ada yang Ditolak</option>
                 </select>
             </div>
+
+            <button type="button" id="btnBroadcastNotif" title="Kirim notifikasi kehadiran ke semua peserta" style="padding: 0.5rem 1rem; background: #f59e0b; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.4rem; transition: background 0.2s;">
+                <i class="fa-solid fa-bell"></i>
+            </button>
 
             <button type="submit" style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.875rem;">
                 <i class="fa-solid fa-search"></i> Cari
@@ -226,5 +237,12 @@
 
     // Initialize on page load
     updatePositions();
+
+    document.getElementById('btnBroadcastNotif').addEventListener('click', function () {
+        const confirmed = confirm('Kirim notifikasi kehadiran JobFair (Jum\'at, 10 Juli 2026) ke semua peserta yang terdaftar?');
+        if (confirmed) {
+            document.getElementById('broadcastForm').submit();
+        }
+    });
 </script>
 @endpush

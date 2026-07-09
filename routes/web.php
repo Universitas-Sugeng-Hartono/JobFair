@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/companies', CompanyController::class);
     Route::resource('admin/positions', \App\Http\Controllers\Admin\PositionController::class);
     Route::resource('admin/participants', \App\Http\Controllers\Admin\ParticipantController::class);
+    Route::post('admin/participants/broadcast-attendance', [\App\Http\Controllers\Admin\ParticipantController::class, 'sendAttendanceReminder'])->name('participants.broadcast-attendance');
 
     // Update application status (accept/reject)
     Route::patch('admin/applications/{application}/status', [\App\Http\Controllers\Admin\ApplicationStatusController::class, 'update'])->name('applications.status');
@@ -52,6 +53,7 @@ Route::post('/peserta/nik', [ParticipantController::class, 'setNik'])->name('par
 Route::post('/peserta/keluar', [ParticipantController::class, 'clearNik'])->name('participant.clear-nik');
 Route::get('/peserta/apply/{position_id}', [ParticipantController::class, 'apply'])->name('participant.apply');
 Route::get('/peserta/riwayat', [ParticipantController::class, 'history'])->name('participant.history');
+Route::post('/peserta/notifikasi/{id}/baca', [ParticipantController::class, 'markNotificationRead'])->name('participant.notification.read');
 // Application submit
 Route::post('/apply', [ApplicationController::class, 'store'])->name('application.store');
 

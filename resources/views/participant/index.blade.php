@@ -306,5 +306,6 @@
     </script>
     <x-bottom-nav active="companies" />
     <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
+    <x-participant-notifications />
 </body>
 </html>
