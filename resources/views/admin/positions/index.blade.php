@@ -54,7 +54,7 @@
                 <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                     <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Posisi</th>
                     <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Tahapan Seleksi</th>
-                    <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Waktu Proses</th>
+                    <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Batas Sesi Pendaftaran</th>
                     <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem;">Pelamar</th>
                     <th style="padding: 1rem 1.5rem; color: #475569; font-weight: 600; font-size: 0.875rem; text-align: right;">Aksi</th>
                 </tr>
@@ -71,13 +71,41 @@
                     <td style="padding: 1rem 1.5rem; color: #64748b; font-size: 0.875rem;">
                         @php
                             $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
-                            try {
-                                $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
-                            } catch (\Exception $e) {
+                            $eventTimeSetting = \App\Models\Setting::where('key', 'event_time')->value('value') ?? '';
+
+                            $timePart = '';
+                            if (!empty($eventTimeSetting)) {
+                                if (preg_match('/(\d{1,2}[:.]\d{2})/', $eventTimeSetting, $m)) {
+                                    $timePart = str_replace('.', ':', $m[1]);
+                                } elseif (preg_match('/\b(\d{1,2})\b/', $eventTimeSetting, $m2)) {
+                                    $hour = str_pad($m2[1], 2, '0', STR_PAD_LEFT);
+                                    $timePart = $hour . ':00';
+                                }
+                            }
+
+                            if (!empty($timePart)) {
                                 try {
-                                    $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                                    $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $eventDateSetting . ' ' . $timePart, 'Asia/Jakarta');
                                 } catch (\Exception $e) {
-                                    $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                                    try {
+                                        $eventDateObj = \Carbon\Carbon::parse($eventDateSetting . ' ' . $timePart)->setTimezone('Asia/Jakarta');
+                                    } catch (\Exception $e) {
+                                        try {
+                                            $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+                                        } catch (\Exception $e) {
+                                            $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                                        }
+                                    }
+                                }
+                            } else {
+                                try {
+                                    $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+                                } catch (\Exception $e) {
+                                    try {
+                                        $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                                    } catch (\Exception $e) {
+                                        $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                                    }
                                 }
                             }
 

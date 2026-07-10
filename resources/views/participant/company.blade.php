@@ -109,13 +109,44 @@
         @php
             $hasAppliedToCompany = count(array_intersect($companyPositions->pluck('id')->toArray(), $appliedPositionIds)) > 0;
             $eventDateSetting = \App\Models\Setting::where('key', 'event_date')->value('value') ?? date('Y-m-d');
-            try {
-                $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
-            } catch (\Exception $e) {
+            $eventTimeSetting = \App\Models\Setting::where('key', 'event_time')->value('value') ?? '';
+
+            // Normalize time: extract HH:MM or HH.MM or HH patterns
+            $timePart = '';
+            if (!empty($eventTimeSetting)) {
+                // try to find HH:MM or HH.MM
+                if (preg_match('/(\d{1,2}[:.]\d{2})/', $eventTimeSetting, $m)) {
+                    $timePart = str_replace('.', ':', $m[1]);
+                } elseif (preg_match('/\b(\d{1,2})\b/', $eventTimeSetting, $m2)) {
+                    $hour = str_pad($m2[1], 2, '0', STR_PAD_LEFT);
+                    $timePart = $hour . ':00';
+                }
+            }
+
+            if (!empty($timePart)) {
                 try {
-                    $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                    $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $eventDateSetting . ' ' . $timePart, 'Asia/Jakarta');
                 } catch (\Exception $e) {
-                    $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                    try {
+                        $eventDateObj = \Carbon\Carbon::parse($eventDateSetting . ' ' . $timePart)->setTimezone('Asia/Jakarta');
+                    } catch (\Exception $e) {
+                        // fallback to end of day
+                        try {
+                            $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+                        } catch (\Exception $e) {
+                            $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                        }
+                    }
+                }
+            } else {
+                try {
+                    $eventDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $eventDateSetting, 'Asia/Jakarta')->endOfDay();
+                } catch (\Exception $e) {
+                    try {
+                        $eventDateObj = \Carbon\Carbon::parse($eventDateSetting)->setTimezone('Asia/Jakarta')->endOfDay();
+                    } catch (\Exception $e) {
+                        $eventDateObj = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+                    }
                 }
             }
 
@@ -160,7 +191,7 @@
                                 @if($pos->selection)
                                     <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-solid fa-clipboard-check mr-1 text-slate-400"></i>{{ $pos->selection }}</span>
                                 @endif
-                                    <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>Waktu Proses: {{ $waktuProses }}</span>
+                                    <span class="text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-sm"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>Batas Sesi Pendaftaran: {{ $waktuProses }}</span>
                             </div>
                         </div>
                     </div>
@@ -247,6 +278,5 @@
     </main>
     <x-bottom-nav active="companies" />
     <x-qr-modal :participant="$participant ?? null" :nik="$nik ?? null" />
-    <x-participant-notifications />
 </body>
 </html>

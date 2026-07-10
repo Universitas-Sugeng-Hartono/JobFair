@@ -159,6 +159,8 @@
                         <input type="text" name="event_date_desc" value="{{ $settings['event_date_desc'] ?? 'Pendaftaran dibuka selama 1 minggu' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
                     </div>
                 </div>
+
+                <!-- NOTE: removed datetime-local; only keep separate event_date and event_time inputs -->
                 
                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.25rem;">
                     <div>
@@ -174,7 +176,21 @@
                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.25rem;">
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">Waktu Event</label>
-                        <input type="text" name="event_time" value="{{ $settings['event_time'] ?? '08.00 WIB - Selesai' }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
+                        @php
+                            $eventTimeInput = '08:00';
+                            if(!empty($settings['event_time'])) {
+                                try {
+                                    $eventTimeInput = \Carbon\Carbon::parse($settings['event_time'])->format('H:i');
+                                } catch (\Exception $e) {
+                                    // fallback: try extract HH:MM or HH.MM pattern
+                                    preg_match('/(\d{1,2}[:.]\d{2})/', $settings['event_time'], $m);
+                                    if(isset($m[1])) {
+                                        $eventTimeInput = str_replace('.', ':', $m[1]);
+                                    }
+                                }
+                            }
+                        @endphp
+                        <input type="time" name="event_time" value="{{ $eventTimeInput }}" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem;">
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.5rem;">URL Google Maps (Embed src)</label>
