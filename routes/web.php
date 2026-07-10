@@ -20,6 +20,7 @@ Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.log
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/event-status', [\App\Http\Controllers\Admin\DashboardController::class, 'updateEventStatus'])->name('admin.event-status');
 
     Route::resource('admin/companies', CompanyController::class);
     Route::resource('admin/positions', \App\Http\Controllers\Admin\PositionController::class);

@@ -10,6 +10,10 @@ use App\Models\Setting;
 
 class ParticipantController extends Controller
 {
+    private function isEventClosed(): bool
+    {
+        return Setting::where('key', 'event_status')->value('value') === 'closed';
+    }
     public function index(Request $request)
     {
         $companies = Company::with('positions')->get();
@@ -64,6 +68,11 @@ class ParticipantController extends Controller
 
     public function apply($position_id)
     {
+        if ($this->isEventClosed()) {
+            return redirect()->route('participant.index')
+                ->with('error', 'Mohon Maaf Job Fair 2026 telah selesai, Sampai Jumpa di Job Fair Selanjutnya');
+        }
+
         $position = \App\Models\Position::with('company')->findOrFail($position_id);
         
         $nik = session('participant_nik');
@@ -93,6 +102,10 @@ class ParticipantController extends Controller
 
     public function setNik(Request $request)
     {
+        if ($this->isEventClosed()) {
+            return back()->withErrors(['nik' => 'Mohon Maaf Job Fair 2026 telah selesai, Sampai Jumpa di Job Fair Selanjutnya']);
+        }
+
         // Validasi format dasar
         $request->validate([
             'nik'  => 'required|digits:16',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -66,6 +67,8 @@ class DashboardController extends Controller
         $companyAcceptedInternalCounts = $companiesChart->pluck('accepted_internal_count')->toArray();
         $companyAcceptedExternalCounts = $companiesChart->pluck('accepted_external_count')->toArray();
 
+        $eventStatus = Setting::where('key', 'event_status')->value('value') ?? 'open';
+
         return view('admin.dashboard', compact(
             'totalCompanies',
             'totalParticipants',
@@ -84,7 +87,26 @@ class DashboardController extends Controller
             'companyLabels',
             'companyApplicationCounts',
             'companyAcceptedInternalCounts',
-            'companyAcceptedExternalCounts'
+            'companyAcceptedExternalCounts',
+            'eventStatus'
         ));
+    }
+
+    public function updateEventStatus(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|in:open,closed',
+        ]);
+
+        Setting::updateOrCreate(
+            ['key' => 'event_status'],
+            ['value' => $request->status]
+        );
+
+        $message = $request->status === 'closed'
+            ? 'Job Fair 2026 telah ditandai selesai. Login partisipan dan aktivitas lamaran akan ditolak.'
+            : 'Job Fair 2026 telah dimulai kembali. Login partisipan dan lamaran sekarang dibuka.';
+
+        return redirect()->route('admin.dashboard')->with('success', $message);
     }
 }

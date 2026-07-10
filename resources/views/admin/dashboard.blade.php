@@ -103,12 +103,31 @@
 @endpush
 
 @section('content')
-<div class="page-header" style="margin-bottom: 1.5rem;">
+<div class="page-header" style="margin-bottom: 1.5rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
     <div>
         <h1 class="page-title">Dashboard</h1>
         <p style="color: #64748b; font-size: 0.82rem; margin-top: 0.2rem;">
             {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMM YYYY') }}
         </p>
+        <p style="margin: 0.5rem 0 0; color: {{ $eventStatus === 'closed' ? '#dc2626' : '#16a34a' }}; font-size: 0.85rem; font-weight: 600;">
+            Status Event: {{ $eventStatus === 'closed' ? 'Selesai' : 'Sedang Berlangsung' }}
+        </p>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
+        <form action="{{ route('admin.event-status') }}" method="POST" style="margin:0;">
+            @csrf
+            <input type="hidden" name="status" value="open">
+            <button type="submit" style="padding:0.75rem 1rem; background: {{ $eventStatus === 'open' ? '#94a3b8' : '#10b981' }}; color:#fff; border:none; border-radius:12px; cursor: {{ $eventStatus === 'open' ? 'not-allowed' : 'pointer' }};" {{ $eventStatus === 'open' ? 'disabled' : '' }}>
+                Mulai
+            </button>
+        </form>
+        <form action="{{ route('admin.event-status') }}" method="POST" style="margin:0;">
+            @csrf
+            <input type="hidden" name="status" value="closed">
+            <button type="submit" style="padding:0.75rem 1rem; background: {{ $eventStatus === 'closed' ? '#94a3b8' : '#ef4444' }}; color:#fff; border:none; border-radius:12px; cursor: {{ $eventStatus === 'closed' ? 'not-allowed' : 'pointer' }};" {{ $eventStatus === 'closed' ? 'disabled' : '' }}>
+                Selesai
+            </button>
+        </form>
     </div>
 </div>
 

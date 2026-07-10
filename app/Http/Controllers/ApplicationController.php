@@ -7,11 +7,20 @@ use App\Models\Company;
 use App\Models\Participant;
 use App\Models\Application;
 use App\Models\ApplicationAnswer;
+use App\Models\Setting;
 
 class ApplicationController extends Controller
 {
+    private function isEventClosed(): bool
+    {
+        return Setting::where('key', 'event_status')->value('value') === 'closed';
+    }
     public function store(Request $request)
     {
+        if ($this->isEventClosed()) {
+            return back()->with('error', 'Mohon Maaf Job Fair 2026 telah selesai, Sampai Jumpa di Job Fair Selanjutnya');
+        }
+
         $nik = session('participant_nik');
 
         if (!$nik) {
