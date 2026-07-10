@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/positions', \App\Http\Controllers\Admin\PositionController::class);
     Route::resource('admin/participants', \App\Http\Controllers\Admin\ParticipantController::class);
     Route::post('admin/participants/broadcast-attendance', [\App\Http\Controllers\Admin\ParticipantController::class, 'sendAttendanceReminder'])->name('participants.broadcast-attendance');
+    Route::post('admin/participants/attend-all', [\App\Http\Controllers\Admin\ParticipantController::class, 'attendAll'])->name('participants.attend-all');
 
     // Update application status (accept/reject)
     Route::patch('admin/applications/{application}/status', [\App\Http\Controllers\Admin\ApplicationStatusController::class, 'update'])->name('applications.status');

@@ -15,7 +15,11 @@ class DashboardController extends Controller
         $totalParticipantsInternal = \App\Models\Participant::where('participant_type', 'Mahasiswa/Alumni USH')->count();
         $totalParticipantsExternal = \App\Models\Participant::where('participant_type', '!=', 'Mahasiswa/Alumni USH')->count();
         
-        $totalApplications = \App\Models\Application::count();
+        $totalApplications = \App\Models\Application::whereNotNull('answers_payload')
+            ->where('answers_payload', 'like', '%"type":"file"%')
+            ->where('answers_payload', 'not like', '%"path":"-"%')
+            ->where('answers_payload', 'like', '%"path":"%')
+            ->count();
         
         $totalAttended = \App\Models\Participant::whereNotNull('attended_at')->count();
         $totalAttendedInternal = \App\Models\Participant::whereNotNull('attended_at')

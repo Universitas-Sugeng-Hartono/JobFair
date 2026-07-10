@@ -144,4 +144,12 @@ class ParticipantController extends Controller
         return redirect()->route('participants.index')
             ->with('success', "Notifikasi kehadiran berhasil dikirim ke {$count} peserta.");
     }
+
+    public function attendAll(Request $request)
+    {
+        $updatedCount = Participant::whereNull('attended_at')->update(['attended_at' => now()]);
+
+        return redirect()->route('participants.index')
+            ->with('success', "Semua peserta berhasil ditandai hadir ({$updatedCount} peserta). ");
+    }
 }
